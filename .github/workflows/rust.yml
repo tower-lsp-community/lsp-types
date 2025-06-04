@@ -2,39 +2,57 @@ name: Rust
 
 on:
   push:
-    branches: [ master ]
+    branches:
+    - main
   pull_request:
-    branches: [ master ]
+    branches:
+    - main
 
-env:
-  CARGO_TERM_COLOR: always
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  cargo-test:
+    name: cargo test ${{ matrix.os }}-${{ matrix.rust-version }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        rust: [stable, nightly]
-        features: ["", proposed]
-
-    env:
-      CARGO_INCREMENTAL: 0 # Incremental compilation is slower and bloats the cache
-      RUST_BACKTRACE: 1
-
-    runs-on: ubuntu-latest
+        os: [ubuntu-latest]
+        rust-version: [1.82.0, 1.77.0, nightly]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
-    - uses: actions-rs/toolchain@v1
+    - uses: dtolnay/rust-toolchain@master
       with:
-        profile: minimal
-        toolchain: ${{ matrix.rust }}
-        override: true
+        toolchain: ${{ matrix.rust-version }}
 
-    - name: Build
-      run: cargo build
+    - run: cargo +${{ matrix.rust-version }} test
 
-    - name: Run tests
-      run: >
-        FEATURES=${{ matrix.features }}
-        cargo test --features ${FEATURES:-""}
+  cargo-clippy:
+    name: cargo clippy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        components: clippy
+
+    - run: cargo clippy --all-targets --features proposed -- -D warnings
+
+  cargo-fmt:
+    name: cargo fmt
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        components: rustfmt
+
+    - run: cargo fmt --all -- --check
+
+
+        
