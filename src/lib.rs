@@ -7,12 +7,10 @@ Based on: <https://microsoft.github.io/language-server-protocol/specification>
 */
 #![allow(non_upper_case_globals)]
 #![forbid(unsafe_code)]
-#[macro_use]
-extern crate bitflags;
 
 use std::{collections::HashMap, fmt::Debug};
 
-use serde::{de, de::Error, Deserialize, Serialize};
+use serde::{Deserialize, Serialize, de, de::Error};
 use serde_json::Value;
 
 pub use uri::Uri;
@@ -49,8 +47,9 @@ const fn fmt_pascal_case_const(name: &str) -> (PascalCaseBuf, usize) {
 fn fmt_pascal_case(f: &mut std::fmt::Formatter<'_>, name: &str) -> std::fmt::Result {
     for word in name.split('_') {
         let mut chars = word.chars();
-        let first = chars.next().unwrap();
-        write!(f, "{}", first)?;
+        if let Some(first) = chars.next() {
+            write!(f, "{}", first)?;
+        }
         for rest in chars {
             write!(f, "{}", rest.to_lowercase())?;
         }
@@ -2385,15 +2384,16 @@ pub struct RelativePattern {
 /// @since 3.17.0
 pub type Pattern = String;
 
-bitflags! {
-pub struct WatchKind: u8 {
-    /// Interested in create events.
-    const Create = 1;
-    /// Interested in change events
-    const Change = 2;
-    /// Interested in delete events
-    const Delete = 4;
-}
+bitflags::bitflags! {
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub struct WatchKind: u8 {
+        /// Interested in create events.
+        const Create = 1;
+        /// Interested in change events
+        const Change = 2;
+        /// Interested in delete events
+        const Delete = 4;
+    }
 }
 
 impl<'de> serde::Deserialize<'de> for WatchKind {

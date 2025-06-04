@@ -44,7 +44,7 @@ pub struct CallHierarchyPrepareParams {
     pub work_done_progress_params: WorkDoneProgressParams,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct CallHierarchyItem {
     /// The name of this item.
