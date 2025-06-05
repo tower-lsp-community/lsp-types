@@ -2307,13 +2307,13 @@ impl FileEvent {
 }
 
 /// Describe options to be used when registered for text document change events.
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct DidChangeWatchedFilesRegistrationOptions {
     /// The watchers to register.
     pub watchers: Vec<FileSystemWatcher>,
 }
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct FileSystemWatcher {
     /// The glob pattern to watch. See {@link GlobPattern glob pattern}
