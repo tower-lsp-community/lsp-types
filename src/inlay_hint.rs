@@ -86,7 +86,7 @@ pub struct InlayHint {
     pub position: Position,
 
     /// The label of this hint. A human readable string or an array of
-    /// InlayHintLabelPart label parts.
+    /// `InlayHintLabelPart` label parts.
     ///
     /// *Note* that neither the string nor the label part can be empty.
     pub label: InlayHintLabel,

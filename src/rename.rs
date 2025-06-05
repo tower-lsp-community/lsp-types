@@ -9,7 +9,7 @@ pub struct RenameParams {
     pub text_document_position: TextDocumentPositionParams,
 
     /// The new name of the symbol. If the given name is not valid the
-    /// request must return a [ResponseError](#ResponseError) with an
+    /// request must return a [`ResponseError`](#ResponseError) with an
     /// appropriate message set.
     pub new_name: String,
 

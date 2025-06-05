@@ -109,8 +109,8 @@ pub struct InlineCompletionContext {
     pub selected_completion_info: Option<SelectedCompletionInfo>,
 }
 
-/// InlineCompletion response can be multiple completion items, or a list of completion items
-#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
+/// `InlineCompletion` response can be multiple completion items, or a list of completion items
+#[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum InlineCompletionResponse {
     Array(Vec<InlineCompletionItem>),
@@ -120,7 +120,7 @@ pub enum InlineCompletionResponse {
 /// Represents a collection of [`InlineCompletionItem`] to be presented in the editor.
 ///
 /// @since 3.18.0
-#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
 pub struct InlineCompletionList {
     /// The inline completion items
     pub items: Vec<InlineCompletionItem>,
@@ -130,7 +130,7 @@ pub struct InlineCompletionList {
 /// to complete text that is being typed.
 ///
 /// @since 3.18.0
-#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct InlineCompletionItem {
     /// The text to replace the range with. Must be set.

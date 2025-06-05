@@ -16,36 +16,38 @@ use crate::{
 pub struct SemanticTokenType(Cow<'static, str>);
 
 impl SemanticTokenType {
-    pub const NAMESPACE: SemanticTokenType = SemanticTokenType::new("namespace");
-    pub const TYPE: SemanticTokenType = SemanticTokenType::new("type");
-    pub const CLASS: SemanticTokenType = SemanticTokenType::new("class");
-    pub const ENUM: SemanticTokenType = SemanticTokenType::new("enum");
-    pub const INTERFACE: SemanticTokenType = SemanticTokenType::new("interface");
-    pub const STRUCT: SemanticTokenType = SemanticTokenType::new("struct");
-    pub const TYPE_PARAMETER: SemanticTokenType = SemanticTokenType::new("typeParameter");
-    pub const PARAMETER: SemanticTokenType = SemanticTokenType::new("parameter");
-    pub const VARIABLE: SemanticTokenType = SemanticTokenType::new("variable");
-    pub const PROPERTY: SemanticTokenType = SemanticTokenType::new("property");
-    pub const ENUM_MEMBER: SemanticTokenType = SemanticTokenType::new("enumMember");
-    pub const EVENT: SemanticTokenType = SemanticTokenType::new("event");
-    pub const FUNCTION: SemanticTokenType = SemanticTokenType::new("function");
-    pub const METHOD: SemanticTokenType = SemanticTokenType::new("method");
-    pub const MACRO: SemanticTokenType = SemanticTokenType::new("macro");
-    pub const KEYWORD: SemanticTokenType = SemanticTokenType::new("keyword");
-    pub const MODIFIER: SemanticTokenType = SemanticTokenType::new("modifier");
-    pub const COMMENT: SemanticTokenType = SemanticTokenType::new("comment");
-    pub const STRING: SemanticTokenType = SemanticTokenType::new("string");
-    pub const NUMBER: SemanticTokenType = SemanticTokenType::new("number");
-    pub const REGEXP: SemanticTokenType = SemanticTokenType::new("regexp");
-    pub const OPERATOR: SemanticTokenType = SemanticTokenType::new("operator");
+    pub const NAMESPACE: Self = Self::new("namespace");
+    pub const TYPE: Self = Self::new("type");
+    pub const CLASS: Self = Self::new("class");
+    pub const ENUM: Self = Self::new("enum");
+    pub const INTERFACE: Self = Self::new("interface");
+    pub const STRUCT: Self = Self::new("struct");
+    pub const TYPE_PARAMETER: Self = Self::new("typeParameter");
+    pub const PARAMETER: Self = Self::new("parameter");
+    pub const VARIABLE: Self = Self::new("variable");
+    pub const PROPERTY: Self = Self::new("property");
+    pub const ENUM_MEMBER: Self = Self::new("enumMember");
+    pub const EVENT: Self = Self::new("event");
+    pub const FUNCTION: Self = Self::new("function");
+    pub const METHOD: Self = Self::new("method");
+    pub const MACRO: Self = Self::new("macro");
+    pub const KEYWORD: Self = Self::new("keyword");
+    pub const MODIFIER: Self = Self::new("modifier");
+    pub const COMMENT: Self = Self::new("comment");
+    pub const STRING: Self = Self::new("string");
+    pub const NUMBER: Self = Self::new("number");
+    pub const REGEXP: Self = Self::new("regexp");
+    pub const OPERATOR: Self = Self::new("operator");
 
     /// @since 3.17.0
-    pub const DECORATOR: SemanticTokenType = SemanticTokenType::new("decorator");
+    pub const DECORATOR: Self = Self::new("decorator");
 
+    #[must_use]
     pub const fn new(tag: &'static str) -> Self {
-        SemanticTokenType(Cow::Borrowed(tag))
+        Self(Cow::Borrowed(tag))
     }
 
+    #[must_use]
     pub fn as_str(&self) -> &str {
         &self.0
     }
@@ -53,13 +55,13 @@ impl SemanticTokenType {
 
 impl From<String> for SemanticTokenType {
     fn from(from: String) -> Self {
-        SemanticTokenType(Cow::from(from))
+        Self(Cow::from(from))
     }
 }
 
 impl From<&'static str> for SemanticTokenType {
     fn from(from: &'static str) -> Self {
-        SemanticTokenType::new(from)
+        Self::new(from)
     }
 }
 
@@ -72,21 +74,23 @@ impl From<&'static str> for SemanticTokenType {
 pub struct SemanticTokenModifier(Cow<'static, str>);
 
 impl SemanticTokenModifier {
-    pub const DECLARATION: SemanticTokenModifier = SemanticTokenModifier::new("declaration");
-    pub const DEFINITION: SemanticTokenModifier = SemanticTokenModifier::new("definition");
-    pub const READONLY: SemanticTokenModifier = SemanticTokenModifier::new("readonly");
-    pub const STATIC: SemanticTokenModifier = SemanticTokenModifier::new("static");
-    pub const DEPRECATED: SemanticTokenModifier = SemanticTokenModifier::new("deprecated");
-    pub const ABSTRACT: SemanticTokenModifier = SemanticTokenModifier::new("abstract");
-    pub const ASYNC: SemanticTokenModifier = SemanticTokenModifier::new("async");
-    pub const MODIFICATION: SemanticTokenModifier = SemanticTokenModifier::new("modification");
-    pub const DOCUMENTATION: SemanticTokenModifier = SemanticTokenModifier::new("documentation");
-    pub const DEFAULT_LIBRARY: SemanticTokenModifier = SemanticTokenModifier::new("defaultLibrary");
+    pub const DECLARATION: Self = Self::new("declaration");
+    pub const DEFINITION: Self = Self::new("definition");
+    pub const READONLY: Self = Self::new("readonly");
+    pub const STATIC: Self = Self::new("static");
+    pub const DEPRECATED: Self = Self::new("deprecated");
+    pub const ABSTRACT: Self = Self::new("abstract");
+    pub const ASYNC: Self = Self::new("async");
+    pub const MODIFICATION: Self = Self::new("modification");
+    pub const DOCUMENTATION: Self = Self::new("documentation");
+    pub const DEFAULT_LIBRARY: Self = Self::new("defaultLibrary");
 
+    #[must_use]
     pub const fn new(tag: &'static str) -> Self {
-        SemanticTokenModifier(Cow::Borrowed(tag))
+        Self(Cow::Borrowed(tag))
     }
 
+    #[must_use]
     pub fn as_str(&self) -> &str {
         &self.0
     }
@@ -94,13 +98,13 @@ impl SemanticTokenModifier {
 
 impl From<String> for SemanticTokenModifier {
     fn from(from: String) -> Self {
-        SemanticTokenModifier(Cow::from(from))
+        Self(Cow::from(from))
     }
 }
 
 impl From<&'static str> for SemanticTokenModifier {
     fn from(from: &'static str) -> Self {
-        SemanticTokenModifier::new(from)
+        Self::new(from)
     }
 }
 
@@ -108,12 +112,14 @@ impl From<&'static str> for SemanticTokenModifier {
 pub struct TokenFormat(Cow<'static, str>);
 
 impl TokenFormat {
-    pub const RELATIVE: TokenFormat = TokenFormat::new("relative");
+    pub const RELATIVE: Self = Self::new("relative");
 
+    #[must_use]
     pub const fn new(tag: &'static str) -> Self {
-        TokenFormat(Cow::Borrowed(tag))
+        Self(Cow::Borrowed(tag))
     }
 
+    #[must_use]
     pub fn as_str(&self) -> &str {
         &self.0
     }
@@ -121,13 +127,13 @@ impl TokenFormat {
 
 impl From<String> for TokenFormat {
     fn from(from: String) -> Self {
-        TokenFormat(Cow::from(from))
+        Self(Cow::from(from))
     }
 }
 
 impl From<&'static str> for TokenFormat {
     fn from(from: &'static str) -> Self {
-        TokenFormat::new(from)
+        Self::new(from)
     }
 }
 
@@ -153,7 +159,7 @@ pub struct SemanticToken {
 }
 
 impl SemanticToken {
-    fn deserialize_tokens<'de, D>(deserializer: D) -> Result<Vec<SemanticToken>, D::Error>
+    fn deserialize_tokens<'de, D>(deserializer: D) -> Result<Vec<Self>, D::Error>
     where
         D: serde::Deserializer<'de>,
     {
@@ -166,7 +172,7 @@ impl SemanticToken {
 
         Result::Ok(
             chunks
-                .map(|chunk| SemanticToken {
+                .map(|chunk| Self {
                     delta_line: chunk[0],
                     delta_start: chunk[1],
                     length: chunk[2],
@@ -177,12 +183,12 @@ impl SemanticToken {
         )
     }
 
-    fn serialize_tokens<S>(tokens: &[SemanticToken], serializer: S) -> Result<S::Ok, S::Error>
+    fn serialize_tokens<S>(tokens: &[Self], serializer: S) -> Result<S::Ok, S::Error>
     where
         S: serde::Serializer,
     {
         let mut seq = serializer.serialize_seq(Some(tokens.len() * 5))?;
-        for token in tokens.iter() {
+        for token in tokens {
             seq.serialize_element(&token.delta_line)?;
             seq.serialize_element(&token.delta_start)?;
             seq.serialize_element(&token.length)?;
@@ -192,9 +198,7 @@ impl SemanticToken {
         seq.end()
     }
 
-    fn deserialize_tokens_opt<'de, D>(
-        deserializer: D,
-    ) -> Result<Option<Vec<SemanticToken>>, D::Error>
+    fn deserialize_tokens_opt<'de, D>(deserializer: D) -> Result<Option<Vec<Self>>, D::Error>
     where
         D: serde::Deserializer<'de>,
     {
@@ -208,10 +212,7 @@ impl SemanticToken {
         Ok(Option::<Wrapper>::deserialize(deserializer)?.map(|wrapper| wrapper.tokens))
     }
 
-    fn serialize_tokens_opt<S>(
-        data: &Option<Vec<SemanticToken>>,
-        serializer: S,
-    ) -> Result<S::Ok, S::Error>
+    fn serialize_tokens_opt<S>(data: &Option<Vec<Self>>, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: serde::Serializer,
     {
@@ -222,7 +223,7 @@ impl SemanticToken {
             tokens: Vec<SemanticToken>,
         }
 
-        let opt = data.as_ref().map(|t| Wrapper { tokens: t.to_vec() });
+        let opt = data.as_ref().map(|t| Wrapper { tokens: t.clone() });
 
         opt.serialize(serializer)
     }
@@ -270,13 +271,13 @@ pub enum SemanticTokensResult {
 
 impl From<SemanticTokens> for SemanticTokensResult {
     fn from(from: SemanticTokens) -> Self {
-        SemanticTokensResult::Tokens(from)
+        Self::Tokens(from)
     }
 }
 
 impl From<SemanticTokensPartialResult> for SemanticTokensResult {
     fn from(from: SemanticTokensPartialResult) -> Self {
-        SemanticTokensResult::Partial(from)
+        Self::Partial(from)
     }
 }
 
@@ -307,13 +308,13 @@ pub enum SemanticTokensFullDeltaResult {
 
 impl From<SemanticTokens> for SemanticTokensFullDeltaResult {
     fn from(from: SemanticTokens) -> Self {
-        SemanticTokensFullDeltaResult::Tokens(from)
+        Self::Tokens(from)
     }
 }
 
 impl From<SemanticTokensDelta> for SemanticTokensFullDeltaResult {
     fn from(from: SemanticTokensDelta) -> Self {
-        SemanticTokensFullDeltaResult::TokensDelta(from)
+        Self::TokensDelta(from)
     }
 }
 
@@ -458,13 +459,13 @@ pub enum SemanticTokensServerCapabilities {
 
 impl From<SemanticTokensOptions> for SemanticTokensServerCapabilities {
     fn from(from: SemanticTokensOptions) -> Self {
-        SemanticTokensServerCapabilities::SemanticTokensOptions(from)
+        Self::SemanticTokensOptions(from)
     }
 }
 
 impl From<SemanticTokensRegistrationOptions> for SemanticTokensServerCapabilities {
     fn from(from: SemanticTokensRegistrationOptions) -> Self {
-        SemanticTokensServerCapabilities::SemanticTokensRegistrationOptions(from)
+        Self::SemanticTokensRegistrationOptions(from)
     }
 }
 
@@ -537,13 +538,13 @@ pub enum SemanticTokensRangeResult {
 
 impl From<SemanticTokens> for SemanticTokensRangeResult {
     fn from(tokens: SemanticTokens) -> Self {
-        SemanticTokensRangeResult::Tokens(tokens)
+        Self::Tokens(tokens)
     }
 }
 
 impl From<SemanticTokensPartialResult> for SemanticTokensRangeResult {
     fn from(partial: SemanticTokensPartialResult) -> Self {
-        SemanticTokensRangeResult::Partial(partial)
+        Self::Partial(partial)
     }
 }
 

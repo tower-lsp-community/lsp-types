@@ -246,7 +246,7 @@ mod notification_params {
         VersionedTextDocumentIdentifier,
     };
 
-    use super::*;
+    use super::{LSPObject, NotebookCell, NotebookDocument, Uri};
 
     /// The params sent in an open notebook document notification.
     ///

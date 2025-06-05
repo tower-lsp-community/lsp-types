@@ -48,10 +48,9 @@ pub struct FoldingProviderOptions {}
 #[derive(Debug, Eq, PartialEq, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct FoldingRangeKindCapability {
-    /// The folding range kind values the client supports. When this
-    /// property exists the client also guarantees that it will
-    /// handle values outside its set gracefully and falls back
-    /// to a default value when unknown.
+    /// The folding range kind values the client supports. When this property
+    /// exists the client also guarantees that it will handle values outside its
+    /// set gracefully and falls back to a default value when unknown.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value_set: Option<Vec<FoldingRangeKind>>,
 }
@@ -70,19 +69,23 @@ pub struct FoldingRangeCapability {
 #[derive(Debug, Eq, PartialEq, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct FoldingRangeClientCapabilities {
-    /// Whether implementation supports dynamic registration for folding range providers. If this is set to `true`
-    /// the client supports the new `(FoldingRangeProviderOptions & TextDocumentRegistrationOptions & StaticRegistrationOptions)`
-    /// return value for the corresponding server capability as well.
+    /// Whether implementation supports dynamic registration for folding
+    /// range providers. If this is set to `true` the client supports the
+    /// new `(FoldingRangeProviderOptions & TextDocumentRegistrationOptions &
+    /// StaticRegistrationOptions)` return value for the corresponding server
+    /// capability as well.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamic_registration: Option<bool>,
 
-    /// The maximum number of folding ranges that the client prefers to receive per document. The value serves as a
-    /// hint, servers are free to follow the limit.
+    /// The maximum number of folding ranges that the client prefers to receive
+    /// per document. The value serves as a hint, servers are free to follow
+    /// the limit.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub range_limit: Option<u32>,
 
-    /// If set, the client signals that it only supports folding complete lines. If set, client will
-    /// ignore specified `startCharacter` and `endCharacter` properties in a FoldingRange.
+    /// If set, the client signals that it only supports folding complete lines.
+    /// If set, client will ignore specified `startCharacter` and `endCharacter`
+    /// properties in a `FoldingRange`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub line_folding_only: Option<bool>,
 
@@ -118,20 +121,23 @@ pub struct FoldingRange {
     /// The zero-based line number from where the folded range starts.
     pub start_line: u32,
 
-    /// The zero-based character offset from where the folded range starts. If not defined, defaults to the length of the start line.
+    /// The zero-based character offset from where the folded range starts. If
+    /// not defined, defaults to the length of the start line.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_character: Option<u32>,
 
     /// The zero-based line number where the folded range ends.
     pub end_line: u32,
 
-    /// The zero-based character offset before the folded range ends. If not defined, defaults to the length of the end line.
+    /// The zero-based character offset before the folded range ends. If not
+    /// defined, defaults to the length of the end line.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_character: Option<u32>,
 
-    /// Describes the kind of the folding range such as `comment' or 'region'. The kind
-    /// is used to categorize folding ranges and used by commands like 'Fold all comments'. See
-    /// [FoldingRangeKind](#FoldingRangeKind) for an enumeration of standardized kinds.
+    /// Describes the kind of the folding range such as `comment` or `region`.
+    /// The kind is used to categorize folding ranges and used by commands like
+    /// `Fold all comments`. See [`FoldingRangeKind`] for an enumeration of
+    /// standardized kinds.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kind: Option<FoldingRangeKind>,
 

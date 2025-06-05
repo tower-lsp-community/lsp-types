@@ -48,7 +48,7 @@ fn fmt_pascal_case(f: &mut std::fmt::Formatter<'_>, name: &str) -> std::fmt::Res
     for word in name.split('_') {
         let mut chars = word.chars();
         if let Some(first) = chars.next() {
-            write!(f, "{}", first)?;
+            write!(f, "{first}")?;
         }
         for rest in chars {
             write!(f, "{}", rest.to_lowercase())?;
@@ -248,8 +248,9 @@ pub struct Position {
 }
 
 impl Position {
-    pub fn new(line: u32, character: u32) -> Position {
-        Position { line, character }
+    #[must_use]
+    pub const fn new(line: u32, character: u32) -> Self {
+        Self { line, character }
     }
 }
 
@@ -264,8 +265,9 @@ pub struct Range {
 }
 
 impl Range {
-    pub fn new(start: Position, end: Position) -> Range {
-        Range { start, end }
+    #[must_use]
+    pub const fn new(start: Position, end: Position) -> Self {
+        Self { start, end }
     }
 }
 
@@ -277,8 +279,9 @@ pub struct Location {
 }
 
 impl Location {
-    pub fn new(uri: Uri, range: Range) -> Location {
-        Location { uri, range }
+    #[must_use]
+    pub const fn new(uri: Uri, range: Range) -> Self {
+        Self { uri, range }
     }
 }
 
@@ -312,25 +315,27 @@ pub struct PositionEncodingKind(std::borrow::Cow<'static, str>);
 
 impl PositionEncodingKind {
     /// Character offsets count UTF-8 code units.
-    pub const UTF8: PositionEncodingKind = PositionEncodingKind::new("utf-8");
+    pub const UTF8: Self = Self::new("utf-8");
 
     /// Character offsets count UTF-16 code units.
     ///
     /// This is the default and must always be supported
     /// by servers
-    pub const UTF16: PositionEncodingKind = PositionEncodingKind::new("utf-16");
+    pub const UTF16: Self = Self::new("utf-16");
 
     /// Character offsets count UTF-32 code units.
     ///
     /// Implementation note: these are the same as Unicode code points,
     /// so this `PositionEncodingKind` may also be used for an
     /// encoding-agnostic representation of character offsets.
-    pub const UTF32: PositionEncodingKind = PositionEncodingKind::new("utf-32");
+    pub const UTF32: Self = Self::new("utf-32");
 
+    #[must_use]
     pub const fn new(tag: &'static str) -> Self {
-        PositionEncodingKind(std::borrow::Cow::Borrowed(tag))
+        Self(std::borrow::Cow::Borrowed(tag))
     }
 
+    #[must_use]
     pub fn as_str(&self) -> &str {
         &self.0
     }
@@ -338,13 +343,13 @@ impl PositionEncodingKind {
 
 impl From<String> for PositionEncodingKind {
     fn from(from: String) -> Self {
-        PositionEncodingKind(std::borrow::Cow::from(from))
+        Self(std::borrow::Cow::from(from))
     }
 }
 
 impl From<&'static str> for PositionEncodingKind {
     fn from(from: &'static str) -> Self {
-        PositionEncodingKind::new(from)
+        Self::new(from)
     }
 }
 
@@ -403,6 +408,7 @@ pub struct CodeDescription {
 }
 
 impl Diagnostic {
+    #[must_use]
     pub fn new(
         range: Range,
         severity: Option<DiagnosticSeverity>,
@@ -411,8 +417,8 @@ impl Diagnostic {
         message: String,
         related_information: Option<Vec<DiagnosticRelatedInformation>>,
         tags: Option<Vec<DiagnosticTag>>,
-    ) -> Diagnostic {
-        Diagnostic {
+    ) -> Self {
+        Self {
             range,
             severity,
             code,
@@ -420,21 +426,23 @@ impl Diagnostic {
             message,
             related_information,
             tags,
-            ..Diagnostic::default()
+            ..Self::default()
         }
     }
 
-    pub fn new_simple(range: Range, message: String) -> Diagnostic {
+    #[must_use]
+    pub fn new_simple(range: Range, message: String) -> Self {
         Self::new(range, None, None, None, message, None, None)
     }
 
+    #[must_use]
     pub fn new_with_code_number(
         range: Range,
         severity: DiagnosticSeverity,
         code_number: i32,
         source: Option<String>,
         message: String,
-    ) -> Diagnostic {
+    ) -> Self {
         let code = Some(NumberOrString::Number(code_number));
         Self::new(range, Some(severity), code, source, message, None, None)
     }
@@ -487,11 +495,12 @@ impl DiagnosticTag {
 }
 
 /// Represents a reference to a command. Provides a title which will be used to represent a command in the UI.
+///
 /// Commands are identified by a string identifier. The recommended way to handle commands is to implement
 /// their execution on the server side if the client and server provides the corresponding capabilities.
 /// Alternatively the tool extension code could handle the command.
 /// The protocol currently doesn’t specify a set of well-known commands.
-#[derive(Debug, PartialEq, Clone, Default, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Deserialize, Serialize)]
 pub struct Command {
     /// Title of the command, like `save`.
     pub title: String,
@@ -504,8 +513,9 @@ pub struct Command {
 }
 
 impl Command {
-    pub fn new(title: String, command: String, arguments: Option<Vec<Value>>) -> Command {
-        Command {
+    #[must_use]
+    pub const fn new(title: String, command: String, arguments: Option<Vec<Value>>) -> Self {
+        Self {
             title,
             command,
             arguments,
@@ -530,8 +540,9 @@ pub struct TextEdit {
 }
 
 impl TextEdit {
-    pub fn new(range: Range, new_text: String) -> TextEdit {
-        TextEdit { range, new_text }
+    #[must_use]
+    pub const fn new(range: Range, new_text: String) -> Self {
+        Self { range, new_text }
     }
 }
 
@@ -567,7 +578,7 @@ pub struct TextDocumentEdit {
 
     /// The edits to be applied.
     ///
-    /// @since 3.16.0 - support for AnnotatedTextEdit. This is guarded by the
+    /// @since 3.16.0 - support for `AnnotatedTextEdit`. This is guarded by the
     /// client capability `workspace.workspaceEdit.changeAnnotationSupport`
     pub edits: Vec<OneOf<TextEdit, AnnotatedTextEdit>>,
 }
@@ -693,6 +704,7 @@ pub struct DeleteFile {
 }
 
 /// A workspace edit represents changes to many resources managed in the workspace.
+///
 /// The edit should either provide `changes` or `documentChanges`.
 /// If the client can handle versioned document edits and if `documentChanges` are present,
 /// the latter are preferred over `changes`.
@@ -787,8 +799,9 @@ pub struct ConfigurationItem {
 }
 
 impl WorkspaceEdit {
-    pub fn new(changes: HashMap<Uri, Vec<TextEdit>>) -> WorkspaceEdit {
-        WorkspaceEdit {
+    #[must_use]
+    pub fn new(changes: HashMap<Uri, Vec<TextEdit>>) -> Self {
+        Self {
             changes: Some(changes),
             document_changes: None,
             ..Default::default()
@@ -808,8 +821,9 @@ pub struct TextDocumentIdentifier {
 }
 
 impl TextDocumentIdentifier {
-    pub fn new(uri: Uri) -> TextDocumentIdentifier {
-        TextDocumentIdentifier { uri }
+    #[must_use]
+    pub const fn new(uri: Uri) -> Self {
+        Self { uri }
     }
 }
 
@@ -832,8 +846,9 @@ pub struct TextDocumentItem {
 }
 
 impl TextDocumentItem {
-    pub fn new(uri: Uri, language_id: String, version: i32, text: String) -> TextDocumentItem {
-        TextDocumentItem {
+    #[must_use]
+    pub const fn new(uri: Uri, language_id: String, version: i32, text: String) -> Self {
+        Self {
             uri,
             language_id,
             version,
@@ -857,8 +872,9 @@ pub struct VersionedTextDocumentIdentifier {
 }
 
 impl VersionedTextDocumentIdentifier {
-    pub fn new(uri: Uri, version: i32) -> VersionedTextDocumentIdentifier {
-        VersionedTextDocumentIdentifier { uri, version }
+    #[must_use]
+    pub const fn new(uri: Uri, version: i32) -> Self {
+        Self { uri, version }
     }
 }
 
@@ -882,8 +898,9 @@ pub struct OptionalVersionedTextDocumentIdentifier {
 }
 
 impl OptionalVersionedTextDocumentIdentifier {
-    pub fn new(uri: Uri, version: i32) -> OptionalVersionedTextDocumentIdentifier {
-        OptionalVersionedTextDocumentIdentifier {
+    #[must_use]
+    pub const fn new(uri: Uri, version: i32) -> Self {
+        Self {
             uri,
             version: Some(version),
         }
@@ -906,11 +923,9 @@ pub struct TextDocumentPositionParams {
 }
 
 impl TextDocumentPositionParams {
-    pub fn new(
-        text_document: TextDocumentIdentifier,
-        position: Position,
-    ) -> TextDocumentPositionParams {
-        TextDocumentPositionParams {
+    #[must_use]
+    pub const fn new(text_document: TextDocumentIdentifier, position: Position) -> Self {
+        Self {
             text_document,
             position,
         }
@@ -918,6 +933,7 @@ impl TextDocumentPositionParams {
 }
 
 /// A document filter denotes a document through properties like language, schema or pattern.
+///
 /// Examples are a filter that applies to TypeScript files on disk or a filter the applies to JSON
 /// files with name package.json:
 ///
@@ -943,7 +959,7 @@ pub type DocumentSelector = Vec<DocumentFilter>;
 
 // ========================= Actual Protocol =========================
 
-#[derive(Debug, PartialEq, Clone, Deserialize, Serialize, Default)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct InitializeParams {
     /// The process Id of the parent process that started
@@ -1004,7 +1020,7 @@ pub struct InitializeParams {
     pub work_done_progress_params: WorkDoneProgressParams,
 }
 
-#[derive(Debug, PartialEq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 pub struct ClientInfo {
     /// The name of the client as defined by the client.
     pub name: String,
@@ -1013,7 +1029,7 @@ pub struct ClientInfo {
     pub version: Option<String>,
 }
 
-#[derive(Debug, PartialEq, Clone, Copy, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy, Deserialize, Serialize)]
 pub struct InitializedParams {}
 
 #[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
@@ -1313,19 +1329,16 @@ impl<T> TagSupport<T> {
     /// Support for deserializing a boolean tag Support, in case it's present.
     ///
     /// This is currently the case for vscode 1.41.1
-    fn deserialize_compat<'de, S>(serializer: S) -> Result<Option<TagSupport<T>>, S::Error>
+    fn deserialize_compat<'de, S>(serializer: S) -> Result<Option<Self>, S::Error>
     where
         S: serde::Deserializer<'de>,
         T: serde::Deserialize<'de>,
     {
         Ok(
             match Option::<Value>::deserialize(serializer).map_err(serde::de::Error::custom)? {
-                Some(Value::Bool(false)) => None,
-                Some(Value::Bool(true)) => Some(TagSupport { value_set: vec![] }),
-                Some(other) => {
-                    Some(TagSupport::<T>::deserialize(other).map_err(serde::de::Error::custom)?)
-                }
-                None => None,
+                Some(Value::Bool(false)) | None => None,
+                Some(Value::Bool(true)) => Some(Self { value_set: vec![] }),
+                Some(other) => Some(Self::deserialize(other).map_err(serde::de::Error::custom)?),
             },
         )
     }
@@ -1477,8 +1490,8 @@ pub struct TextDocumentClientCapabilities {
     pub inline_completion: Option<InlineCompletionClientCapabilities>,
 }
 
-/// Where ClientCapabilities are currently empty:
-#[derive(Debug, PartialEq, Clone, Default, Deserialize, Serialize)]
+/// Where `ClientCapabilities` are currently empty:
+#[derive(Debug, PartialEq, Eq, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientCapabilities {
     /// Workspace specific client capabilities.
@@ -1505,7 +1518,7 @@ pub struct ClientCapabilities {
 
     /// Unofficial UT8-offsets extension.
     ///
-    /// See https://clangd.llvm.org/extensions.html#utf-8-offsets.
+    /// See <https://clangd.llvm.org/extensions.html#utf-8-offsets>.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[cfg(feature = "proposed")]
     pub offset_encoding: Option<Vec<String>>,
@@ -1515,7 +1528,7 @@ pub struct ClientCapabilities {
     pub experimental: Option<Value>,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GeneralClientCapabilities {
     /// Client capabilities specific to regular expressions.
@@ -1565,7 +1578,7 @@ pub struct GeneralClientCapabilities {
 /// anymore since the information is outdated).
 ///
 /// @since 3.17.0
-#[derive(Debug, PartialEq, Clone, Default, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct StaleRequestSupportClientCapabilities {
     /// The client will actively cancel the request.
@@ -1577,7 +1590,7 @@ pub struct StaleRequestSupportClientCapabilities {
     pub retry_on_content_modified: Vec<String>,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RegularExpressionsClientCapabilities {
     /// The engine's name.
@@ -1588,7 +1601,7 @@ pub struct RegularExpressionsClientCapabilities {
     pub version: Option<String>,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MarkdownClientCapabilities {
     /// The name of the parser.
@@ -1606,7 +1619,7 @@ pub struct MarkdownClientCapabilities {
     pub allowed_tags: Option<Vec<String>>,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct InitializeResult {
     /// The capabilities the language server provides.
@@ -1618,7 +1631,7 @@ pub struct InitializeResult {
 
     /// Unofficial UT8-offsets extension.
     ///
-    /// See https://clangd.llvm.org/extensions.html#utf-8-offsets.
+    /// See <https://clangd.llvm.org/extensions.html#utf-8-offsets>.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[cfg(feature = "proposed")]
     pub offset_encoding: Option<String>,
@@ -1637,7 +1650,7 @@ pub struct ServerInfo {
 pub struct InitializeError {
     /// Indicates whether the client execute the following retry logic:
     ///
-    /// - (1) show the message provided by the ResponseError to the user
+    /// - (1) show the message provided by the `ResponseError` to the user
     /// - (2) user selects retry or cancel
     /// - (3) if user selected retry the initialize method is sent again.
     pub retry: bool,
@@ -1792,7 +1805,7 @@ impl From<bool> for TypeDefinitionProviderCapability {
     }
 }
 
-#[derive(Debug, PartialEq, Clone, Default, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ServerCapabilities {
     /// The position encoding the server picked from the encodings offered
@@ -1970,7 +1983,7 @@ pub struct WorkspaceServerCapabilities {
 }
 
 /// General parameters to to register for a capability.
-#[derive(Debug, PartialEq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Registration {
     /// The id used to register the request. The id can be used to deregister
@@ -1985,7 +1998,7 @@ pub struct Registration {
     pub register_options: Option<Value>,
 }
 
-#[derive(Debug, PartialEq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 pub struct RegistrationParams {
     pub registrations: Vec<Registration>,
 }
@@ -2132,7 +2145,7 @@ pub struct UnregistrationParams {
     pub unregisterations: Vec<Unregistration>,
 }
 
-#[derive(Debug, PartialEq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 pub struct DidChangeConfigurationParams {
     /// The actual changed settings
     pub settings: Value,
@@ -2177,7 +2190,7 @@ pub struct TextDocumentContentChangeEvent {
 
 /// Describe options to be used when registering for text document change events.
 ///
-/// Extends TextDocumentRegistrationOptions
+/// Extends `TextDocumentRegistrationOptions`
 #[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentChangeRegistrationOptions {
@@ -2197,7 +2210,7 @@ pub struct WillSaveTextDocumentParams {
     /// The document that will be saved.
     pub text_document: TextDocumentIdentifier,
 
-    /// The 'TextDocumentSaveReason'.
+    /// The '`TextDocumentSaveReason`'.
     pub reason: TextDocumentSaveReason,
 }
 
@@ -2301,8 +2314,9 @@ pub struct FileEvent {
 }
 
 impl FileEvent {
-    pub fn new(uri: Uri, typ: FileChangeType) -> FileEvent {
-        FileEvent { uri, typ }
+    #[must_use]
+    pub const fn new(uri: Uri, typ: FileChangeType) -> Self {
+        Self { uri, typ }
     }
 }
 
@@ -2316,7 +2330,7 @@ pub struct DidChangeWatchedFilesRegistrationOptions {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct FileSystemWatcher {
-    /// The glob pattern to watch. See {@link GlobPattern glob pattern}
+    /// The glob pattern to watch. See {@link `GlobPattern` glob pattern}
     /// for more detail.
     ///
     /// @since 3.17.0 support for relative patterns.
@@ -2402,7 +2416,7 @@ impl<'de> serde::Deserialize<'de> for WatchKind {
         D: serde::Deserializer<'de>,
     {
         let i = u8::deserialize(deserializer)?;
-        WatchKind::from_bits(i).ok_or_else(|| {
+        Self::from_bits(i).ok_or_else(|| {
             D::Error::invalid_value(de::Unexpected::Unsigned(u64::from(i)), &"Unknown flag")
         })
     }
@@ -2431,12 +2445,9 @@ pub struct PublishDiagnosticsParams {
 }
 
 impl PublishDiagnosticsParams {
-    pub fn new(
-        uri: Uri,
-        diagnostics: Vec<Diagnostic>,
-        version: Option<i32>,
-    ) -> PublishDiagnosticsParams {
-        PublishDiagnosticsParams {
+    #[must_use]
+    pub const fn new(uri: Uri, diagnostics: Vec<Diagnostic>, version: Option<i32>) -> Self {
+        Self {
             uri,
             diagnostics,
             version,
@@ -2451,7 +2462,7 @@ pub enum Documentation {
     MarkupContent(MarkupContent),
 }
 
-/// MarkedString can be used to render human readable text. It is either a
+/// `MarkedString` can be used to render human readable text. It is either a
 /// markdown string or a code-block that provides a language and a code snippet.
 /// The language identifier is semantically equal to the optional language
 /// identifier in fenced code blocks in GitHub issues.
@@ -2475,12 +2486,14 @@ pub struct LanguageString {
 }
 
 impl MarkedString {
-    pub fn from_markdown(markdown: String) -> MarkedString {
-        MarkedString::String(markdown)
+    #[must_use]
+    pub const fn from_markdown(markdown: String) -> Self {
+        Self::String(markdown)
     }
 
-    pub fn from_language_code(language: String, code_block: String) -> MarkedString {
-        MarkedString::LanguageString(LanguageString {
+    #[must_use]
+    pub const fn from_language_code(language: String, code_block: String) -> Self {
+        Self::LanguageString(LanguageString {
             language,
             value: code_block,
         })
@@ -2500,8 +2513,8 @@ pub struct GotoDefinitionParams {
     pub partial_result_params: PartialResultParams,
 }
 
-/// GotoDefinition response can be single location, or multiple Locations or a link.
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+/// `GotoDefinition` response can be single location, or multiple Locations or a link.
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize, Clone)]
 #[serde(untagged)]
 pub enum GotoDefinitionResponse {
     Scalar(Location),
@@ -2511,23 +2524,23 @@ pub enum GotoDefinitionResponse {
 
 impl From<Location> for GotoDefinitionResponse {
     fn from(location: Location) -> Self {
-        GotoDefinitionResponse::Scalar(location)
+        Self::Scalar(location)
     }
 }
 
 impl From<Vec<Location>> for GotoDefinitionResponse {
     fn from(locations: Vec<Location>) -> Self {
-        GotoDefinitionResponse::Array(locations)
+        Self::Array(locations)
     }
 }
 
 impl From<Vec<LocationLink>> for GotoDefinitionResponse {
     fn from(locations: Vec<LocationLink>) -> Self {
-        GotoDefinitionResponse::Link(locations)
+        Self::Link(locations)
     }
 }
 
-#[derive(Debug, PartialEq, Clone, Default, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Deserialize, Serialize)]
 pub struct ExecuteCommandParams {
     /// The identifier of the actual command handler.
     pub command: String,
@@ -2597,6 +2610,7 @@ pub enum MarkupKind {
 }
 
 /// A `MarkupContent` literal represents a string value which content can be represented in different formats.
+///
 /// Currently `plaintext` and `markdown` are supported formats. A `MarkupContent` is usually used in
 /// documentation properties of result literals like `CompletionItem` or `SignatureInformation`.
 /// If the format is `markdown` the content should follow the [GitHub Flavored Markdown Specification](https://github.github.com/gfm/).
@@ -2652,7 +2666,7 @@ mod tests {
 
     use super::*;
 
-    pub(crate) fn test_serialization<SER>(ms: &SER, expected: &str)
+    pub fn test_serialization<SER>(ms: &SER, expected: &str)
     where
         SER: Serialize + for<'de> Deserialize<'de> + PartialEq + std::fmt::Debug,
     {
@@ -2662,7 +2676,7 @@ mod tests {
         assert_eq!(&deserialized, ms);
     }
 
-    pub(crate) fn test_deserialization<T>(json: &str, expected: &T)
+    pub fn test_deserialization<T>(json: &str, expected: &T)
     where
         T: for<'de> Deserialize<'de> + PartialEq + std::fmt::Debug,
     {
@@ -2672,7 +2686,7 @@ mod tests {
 
     #[test]
     fn one_of() {
-        test_serialization(&OneOf::<bool, ()>::Left(true), r#"true"#);
+        test_serialization(&OneOf::<bool, ()>::Left(true), r"true");
         test_serialization(&OneOf::<String, ()>::Left("abcd".into()), r#""abcd""#);
         test_serialization(
             &OneOf::<String, WorkDoneProgressOptions>::Right(WorkDoneProgressOptions {
@@ -2684,7 +2698,7 @@ mod tests {
 
     #[test]
     fn number_or_string() {
-        test_serialization(&NumberOrString::Number(123), r#"123"#);
+        test_serialization(&NumberOrString::Number(123), r"123");
 
         test_serialization(&NumberOrString::String("abcd".into()), r#""abcd""#);
     }
@@ -2727,7 +2741,7 @@ mod tests {
                 document_changes: None,
                 ..Default::default()
             },
-            r#"{}"#,
+            r"{}",
         );
 
         test_serialization(

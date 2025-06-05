@@ -6,7 +6,7 @@ pub type ProgressToken = NumberOrString;
 
 /// The progress notification is sent from the server to the client to ask
 /// the client to indicate progress.
-#[derive(Debug, PartialEq, Deserialize, Serialize, Clone)]
+#[derive(Debug, PartialEq, Eq, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ProgressParams {
     /// The progress token provided by the client.
@@ -16,7 +16,7 @@ pub struct ProgressParams {
     pub value: ProgressParamsValue,
 }
 
-#[derive(Debug, PartialEq, Deserialize, Serialize, Clone)]
+#[derive(Debug, PartialEq, Eq, Deserialize, Serialize, Clone)]
 #[serde(untagged)]
 pub enum ProgressParamsValue {
     WorkDone(WorkDoneProgress),
@@ -24,7 +24,7 @@ pub enum ProgressParamsValue {
 
 /// The `window/workDoneProgress/create` request is sent
 /// from the server to the client to ask the client to create a work done progress.
-#[derive(Debug, PartialEq, Deserialize, Serialize, Clone)]
+#[derive(Debug, PartialEq, Eq, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct WorkDoneProgressCreateParams {
     /// The token to be used to report progress.
@@ -33,7 +33,7 @@ pub struct WorkDoneProgressCreateParams {
 
 /// The `window/workDoneProgress/cancel` notification is sent from the client
 /// to the server to cancel a progress initiated on the server side using the `window/workDoneProgress/create`.
-#[derive(Debug, PartialEq, Deserialize, Serialize, Clone)]
+#[derive(Debug, PartialEq, Eq, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct WorkDoneProgressCancelParams {
     /// The token to be used to report progress.
@@ -56,7 +56,7 @@ pub struct WorkDoneProgressParams {
     pub work_done_token: Option<ProgressToken>,
 }
 
-#[derive(Debug, PartialEq, Default, Deserialize, Serialize, Clone)]
+#[derive(Debug, PartialEq, Eq, Default, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct WorkDoneProgressBegin {
     /// Mandatory title of the progress operation. Used to briefly inform
@@ -73,7 +73,7 @@ pub struct WorkDoneProgressBegin {
     /// Optional, more detailed associated progress message. Contains
     /// complementary information to the `title`.
     ///
-    /// Examples: "3/25 files", "project/src/module2", "node_modules/some_dep".
+    /// Examples: "3/25 files", "project/src/module2", "`node_modules/some_dep`".
     /// If unset, the previous progress message (if any) is still valid.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
@@ -88,7 +88,7 @@ pub struct WorkDoneProgressBegin {
     pub percentage: Option<u32>,
 }
 
-#[derive(Debug, PartialEq, Default, Deserialize, Serialize, Clone)]
+#[derive(Debug, PartialEq, Eq, Default, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct WorkDoneProgressReport {
     /// Controls if a cancel button should show to allow the user to cancel the
@@ -99,7 +99,7 @@ pub struct WorkDoneProgressReport {
 
     /// Optional, more detailed associated progress message. Contains
     /// complementary information to the `title`.
-    /// Examples: "3/25 files", "project/src/module2", "node_modules/some_dep".
+    /// Examples: "3/25 files", "project/src/module2", "`node_modules/some_dep`".
     /// If unset, the previous progress message (if any) is still valid.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
@@ -114,18 +114,18 @@ pub struct WorkDoneProgressReport {
     pub percentage: Option<u32>,
 }
 
-#[derive(Debug, PartialEq, Default, Deserialize, Serialize, Clone)]
+#[derive(Debug, PartialEq, Eq, Default, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct WorkDoneProgressEnd {
     /// Optional, more detailed associated progress message. Contains
     /// complementary information to the `title`.
-    /// Examples: "3/25 files", "project/src/module2", "node_modules/some_dep".
+    /// Examples: "3/25 files", "project/src/module2", "`node_modules/some_dep`".
     /// If unset, the previous progress message (if any) is still valid.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
 }
 
-#[derive(Debug, PartialEq, Deserialize, Serialize, Clone)]
+#[derive(Debug, PartialEq, Eq, Deserialize, Serialize, Clone)]
 #[serde(tag = "kind", rename_all = "lowercase")]
 pub enum WorkDoneProgress {
     Begin(WorkDoneProgressBegin),

@@ -1,5 +1,3 @@
-use super::*;
-
 use serde::{Serialize, de::DeserializeOwned};
 
 pub trait Request {
@@ -218,8 +216,8 @@ macro_rules! lsp_request {
 pub enum Initialize {}
 
 impl Request for Initialize {
-    type Params = InitializeParams;
-    type Result = InitializeResult;
+    type Params = crate::InitializeParams;
+    type Result = crate::InitializeResult;
     const METHOD: &'static str = "initialize";
 }
 
@@ -242,8 +240,8 @@ impl Request for Shutdown {
 pub enum ShowMessageRequest {}
 
 impl Request for ShowMessageRequest {
-    type Params = ShowMessageRequestParams;
-    type Result = Option<MessageActionItem>;
+    type Params = crate::ShowMessageRequestParams;
+    type Result = Option<crate::MessageActionItem>;
     const METHOD: &'static str = "window/showMessageRequest";
 }
 
@@ -254,7 +252,7 @@ impl Request for ShowMessageRequest {
 pub enum RegisterCapability {}
 
 impl Request for RegisterCapability {
-    type Params = RegistrationParams;
+    type Params = crate::RegistrationParams;
     type Result = ();
     const METHOD: &'static str = "client/registerCapability";
 }
@@ -265,13 +263,14 @@ impl Request for RegisterCapability {
 pub enum UnregisterCapability {}
 
 impl Request for UnregisterCapability {
-    type Params = UnregistrationParams;
+    type Params = crate::UnregistrationParams;
     type Result = ();
     const METHOD: &'static str = "client/unregisterCapability";
 }
 
 /// The Completion request is sent from the client to the server to compute completion items at a given cursor position.
-/// Completion items are presented in the IntelliSense user interface. If computing full completion items is expensive,
+///
+/// Completion items are presented in the `IntelliSense` user interface. If computing full completion items is expensive,
 /// servers can additionally provide a handler for the completion item resolve request ('completionItem/resolve').
 /// This request is sent when a completion item is selected in the user interface. A typical use case is for example:
 /// the 'textDocument/completion' request doesn’t fill in the documentation property for returned completion items
@@ -284,8 +283,8 @@ impl Request for UnregisterCapability {
 pub enum Completion {}
 
 impl Request for Completion {
-    type Params = CompletionParams;
-    type Result = Option<CompletionResponse>;
+    type Params = crate::CompletionParams;
+    type Result = Option<crate::CompletionResponse>;
     const METHOD: &'static str = "textDocument/completion";
 }
 
@@ -294,8 +293,8 @@ impl Request for Completion {
 pub enum ResolveCompletionItem {}
 
 impl Request for ResolveCompletionItem {
-    type Params = CompletionItem;
-    type Result = CompletionItem;
+    type Params = crate::CompletionItem;
+    type Result = crate::CompletionItem;
     const METHOD: &'static str = "completionItem/resolve";
 }
 
@@ -305,8 +304,8 @@ impl Request for ResolveCompletionItem {
 pub enum HoverRequest {}
 
 impl Request for HoverRequest {
-    type Params = HoverParams;
-    type Result = Option<Hover>;
+    type Params = crate::HoverParams;
+    type Result = Option<crate::Hover>;
     const METHOD: &'static str = "textDocument/hover";
 }
 
@@ -316,15 +315,15 @@ impl Request for HoverRequest {
 pub enum SignatureHelpRequest {}
 
 impl Request for SignatureHelpRequest {
-    type Params = SignatureHelpParams;
-    type Result = Option<SignatureHelp>;
+    type Params = crate::SignatureHelpParams;
+    type Result = Option<crate::SignatureHelp>;
     const METHOD: &'static str = "textDocument/signatureHelp";
 }
 
 #[derive(Debug)]
 pub enum GotoDeclaration {}
-pub type GotoDeclarationParams = GotoDefinitionParams;
-pub type GotoDeclarationResponse = GotoDefinitionResponse;
+pub type GotoDeclarationParams = crate::GotoDefinitionParams;
+pub type GotoDeclarationResponse = crate::GotoDefinitionResponse;
 
 /// The goto declaration request is sent from the client to the server to resolve the declaration location of
 /// a symbol at a given text document position.
@@ -340,8 +339,8 @@ impl Request for GotoDeclaration {
 pub enum GotoDefinition {}
 
 impl Request for GotoDefinition {
-    type Params = GotoDefinitionParams;
-    type Result = Option<GotoDefinitionResponse>;
+    type Params = crate::GotoDefinitionParams;
+    type Result = Option<crate::GotoDefinitionResponse>;
     const METHOD: &'static str = "textDocument/definition";
 }
 
@@ -351,8 +350,8 @@ impl Request for GotoDefinition {
 pub enum References {}
 
 impl Request for References {
-    type Params = ReferenceParams;
-    type Result = Option<Vec<Location>>;
+    type Params = crate::ReferenceParams;
+    type Result = Option<Vec<crate::Location>>;
     const METHOD: &'static str = "textDocument/references";
 }
 
@@ -362,8 +361,8 @@ impl Request for References {
 #[derive(Debug)]
 pub enum GotoTypeDefinition {}
 
-pub type GotoTypeDefinitionParams = GotoDefinitionParams;
-pub type GotoTypeDefinitionResponse = GotoDefinitionResponse;
+pub type GotoTypeDefinitionParams = crate::GotoDefinitionParams;
+pub type GotoTypeDefinitionResponse = crate::GotoDefinitionResponse;
 
 impl Request for GotoTypeDefinition {
     type Params = GotoTypeDefinitionParams;
@@ -378,7 +377,7 @@ impl Request for GotoTypeDefinition {
 pub enum GotoImplementation {}
 
 pub type GotoImplementationParams = GotoTypeDefinitionParams;
-pub type GotoImplementationResponse = GotoDefinitionResponse;
+pub type GotoImplementationResponse = crate::GotoDefinitionResponse;
 
 impl Request for GotoImplementation {
     type Params = GotoImplementationParams;
@@ -391,14 +390,14 @@ impl Request for GotoImplementation {
 /// For programming languages this usually highlights all references to the symbol scoped to this file.
 /// However we kept 'textDocument/documentHighlight' and 'textDocument/references' separate requests since
 /// the first one is allowed to be more fuzzy.
-/// Symbol matches usually have a DocumentHighlightKind of Read or Write whereas fuzzy or textual matches
+/// Symbol matches usually have a `DocumentHighlightKind` of Read or Write whereas fuzzy or textual matches
 /// use Text as the kind.
 #[derive(Debug)]
 pub enum DocumentHighlightRequest {}
 
 impl Request for DocumentHighlightRequest {
-    type Params = DocumentHighlightParams;
-    type Result = Option<Vec<DocumentHighlight>>;
+    type Params = crate::DocumentHighlightParams;
+    type Result = Option<Vec<crate::DocumentHighlight>>;
     const METHOD: &'static str = "textDocument/documentHighlight";
 }
 
@@ -408,8 +407,8 @@ impl Request for DocumentHighlightRequest {
 pub enum DocumentSymbolRequest {}
 
 impl Request for DocumentSymbolRequest {
-    type Params = DocumentSymbolParams;
-    type Result = Option<DocumentSymbolResponse>;
+    type Params = crate::DocumentSymbolParams;
+    type Result = Option<crate::DocumentSymbolResponse>;
     const METHOD: &'static str = "textDocument/documentSymbol";
 }
 
@@ -419,8 +418,8 @@ impl Request for DocumentSymbolRequest {
 pub enum WorkspaceSymbolRequest {}
 
 impl Request for WorkspaceSymbolRequest {
-    type Params = WorkspaceSymbolParams;
-    type Result = Option<WorkspaceSymbolResponse>;
+    type Params = crate::WorkspaceSymbolParams;
+    type Result = Option<crate::WorkspaceSymbolResponse>;
     const METHOD: &'static str = "workspace/symbol";
 }
 
@@ -430,25 +429,26 @@ impl Request for WorkspaceSymbolRequest {
 pub enum WorkspaceSymbolResolve {}
 
 impl Request for WorkspaceSymbolResolve {
-    type Params = WorkspaceSymbol;
-    type Result = WorkspaceSymbol;
+    type Params = crate::WorkspaceSymbol;
+    type Result = crate::WorkspaceSymbol;
     const METHOD: &'static str = "workspaceSymbol/resolve";
 }
 
 /// The workspace/executeCommand request is sent from the client to the server to trigger command execution on the server.
-/// In most cases the server creates a WorkspaceEdit structure and applies the changes to the workspace using the request
+///
+/// In most cases the server creates a `WorkspaceEdit` structure and applies the changes to the workspace using the request
 /// workspace/applyEdit which is sent from the server to the client.
 #[derive(Debug)]
 pub enum ExecuteCommand {}
 
 impl Request for ExecuteCommand {
-    type Params = ExecuteCommandParams;
-    type Result = Option<Value>;
+    type Params = crate::ExecuteCommandParams;
+    type Result = Option<crate::Value>;
     const METHOD: &'static str = "workspace/executeCommand";
 }
 
 /// The document will save request is sent from the client to the server before the document is
-/// actually saved. The request can return an array of TextEdits which will be applied to the text
+/// actually saved. The request can return an array of `TextEdits` which will be applied to the text
 /// document before it is saved. Please note that clients might drop results if computing the text
 /// edits took too long or if a server constantly fails on this request. This is done to keep the
 /// save fast and reliable.
@@ -456,8 +456,8 @@ impl Request for ExecuteCommand {
 pub enum WillSaveWaitUntil {}
 
 impl Request for WillSaveWaitUntil {
-    type Params = WillSaveTextDocumentParams;
-    type Result = Option<Vec<TextEdit>>;
+    type Params = crate::WillSaveTextDocumentParams;
+    type Result = Option<Vec<crate::TextEdit>>;
     const METHOD: &'static str = "textDocument/willSaveWaitUntil";
 }
 
@@ -467,30 +467,30 @@ impl Request for WillSaveWaitUntil {
 pub enum ApplyWorkspaceEdit {}
 
 impl Request for ApplyWorkspaceEdit {
-    type Params = ApplyWorkspaceEditParams;
-    type Result = ApplyWorkspaceEditResponse;
+    type Params = crate::ApplyWorkspaceEditParams;
+    type Result = crate::ApplyWorkspaceEditResponse;
     const METHOD: &'static str = "workspace/applyEdit";
 }
 
 /// The workspace/configuration request is sent from the server to the client to fetch configuration settings
 /// from the client. The request can fetch several configuration settings in one roundtrip.
-/// The order of the returned configuration settings correspond to the order of the passed ConfigurationItems
+/// The order of the returned configuration settings correspond to the order of the passed `ConfigurationItems`
 /// (e.g. the first item in the response is the result for the first configuration item in the params).
 ///
-/// A ConfigurationItem consists of the configuration section to ask for and an additional scope URI.
+/// A `ConfigurationItem` consists of the configuration section to ask for and an additional scope URI.
 /// The configuration section ask for is defined by the server and doesn’t necessarily need to correspond to
 /// the configuration store used be the client. So a server might ask for a configuration cpp.formatterOptions
 /// but the client stores the configuration in a XML store layout differently.
 /// It is up to the client to do the necessary conversion. If a scope URI is provided the client should return
-/// the setting scoped to the provided resource. If the client for example uses EditorConfig to manage its
+/// the setting scoped to the provided resource. If the client for example uses `EditorConfig` to manage its
 /// settings the configuration should be returned for the passed resource URI. If the client can’t provide a
 /// configuration setting for a given scope then null need to be present in the returned array.
 #[derive(Debug)]
 pub enum WorkspaceConfiguration {}
 
 impl Request for WorkspaceConfiguration {
-    type Params = ConfigurationParams;
-    type Result = Vec<Value>;
+    type Params = crate::ConfigurationParams;
+    type Result = Vec<crate::Value>;
     const METHOD: &'static str = "workspace/configuration";
 }
 
@@ -501,12 +501,13 @@ impl Request for WorkspaceConfiguration {
 pub enum CodeActionRequest {}
 
 impl Request for CodeActionRequest {
-    type Params = CodeActionParams;
-    type Result = Option<CodeActionResponse>;
+    type Params = crate::CodeActionParams;
+    type Result = Option<crate::CodeActionResponse>;
     const METHOD: &'static str = "textDocument/codeAction";
 }
 
 /// The request is sent from the client to the server to resolve additional information for a given code action.
+///
 /// This is usually used to compute the `edit` property of a code action to avoid its unnecessary computation
 /// during the `textDocument/codeAction` request.
 ///
@@ -515,8 +516,8 @@ impl Request for CodeActionRequest {
 pub enum CodeActionResolveRequest {}
 
 impl Request for CodeActionResolveRequest {
-    type Params = CodeAction;
-    type Result = CodeAction;
+    type Params = crate::CodeAction;
+    type Result = crate::CodeAction;
     const METHOD: &'static str = "codeAction/resolve";
 }
 
@@ -525,8 +526,8 @@ impl Request for CodeActionResolveRequest {
 pub enum CodeLensRequest {}
 
 impl Request for CodeLensRequest {
-    type Params = CodeLensParams;
-    type Result = Option<Vec<CodeLens>>;
+    type Params = crate::CodeLensParams;
+    type Result = Option<Vec<crate::CodeLens>>;
     const METHOD: &'static str = "textDocument/codeLens";
 }
 
@@ -536,8 +537,8 @@ impl Request for CodeLensRequest {
 pub enum CodeLensResolve {}
 
 impl Request for CodeLensResolve {
-    type Params = CodeLens;
-    type Result = CodeLens;
+    type Params = crate::CodeLens;
+    type Result = crate::CodeLens;
     const METHOD: &'static str = "codeLens/resolve";
 }
 
@@ -546,8 +547,8 @@ impl Request for CodeLensResolve {
 pub enum DocumentLinkRequest {}
 
 impl Request for DocumentLinkRequest {
-    type Params = DocumentLinkParams;
-    type Result = Option<Vec<DocumentLink>>;
+    type Params = crate::DocumentLinkParams;
+    type Result = Option<Vec<crate::DocumentLink>>;
     const METHOD: &'static str = "textDocument/documentLink";
 }
 
@@ -557,8 +558,8 @@ impl Request for DocumentLinkRequest {
 pub enum DocumentLinkResolve {}
 
 impl Request for DocumentLinkResolve {
-    type Params = DocumentLink;
-    type Result = DocumentLink;
+    type Params = crate::DocumentLink;
+    type Result = crate::DocumentLink;
     const METHOD: &'static str = "documentLink/resolve";
 }
 
@@ -567,8 +568,8 @@ impl Request for DocumentLinkResolve {
 pub enum Formatting {}
 
 impl Request for Formatting {
-    type Params = DocumentFormattingParams;
-    type Result = Option<Vec<TextEdit>>;
+    type Params = crate::DocumentFormattingParams;
+    type Result = Option<Vec<crate::TextEdit>>;
     const METHOD: &'static str = "textDocument/formatting";
 }
 
@@ -577,8 +578,8 @@ impl Request for Formatting {
 pub enum RangeFormatting {}
 
 impl Request for RangeFormatting {
-    type Params = DocumentRangeFormattingParams;
-    type Result = Option<Vec<TextEdit>>;
+    type Params = crate::DocumentRangeFormattingParams;
+    type Result = Option<Vec<crate::TextEdit>>;
     const METHOD: &'static str = "textDocument/rangeFormatting";
 }
 
@@ -588,8 +589,8 @@ impl Request for RangeFormatting {
 pub enum OnTypeFormatting {}
 
 impl Request for OnTypeFormatting {
-    type Params = DocumentOnTypeFormattingParams;
-    type Result = Option<Vec<TextEdit>>;
+    type Params = crate::DocumentOnTypeFormattingParams;
+    type Result = Option<Vec<crate::TextEdit>>;
     const METHOD: &'static str = "textDocument/onTypeFormatting";
 }
 
@@ -602,8 +603,8 @@ impl Request for OnTypeFormatting {
 pub enum LinkedEditingRange {}
 
 impl Request for LinkedEditingRange {
-    type Params = LinkedEditingRangeParams;
-    type Result = Option<LinkedEditingRanges>;
+    type Params = crate::LinkedEditingRangeParams;
+    type Result = Option<crate::LinkedEditingRanges>;
     const METHOD: &'static str = "textDocument/linkedEditingRange";
 }
 
@@ -612,8 +613,8 @@ impl Request for LinkedEditingRange {
 pub enum Rename {}
 
 impl Request for Rename {
-    type Params = RenameParams;
-    type Result = Option<WorkspaceEdit>;
+    type Params = crate::RenameParams;
+    type Result = Option<crate::WorkspaceEdit>;
     const METHOD: &'static str = "textDocument/rename";
 }
 
@@ -623,8 +624,8 @@ impl Request for Rename {
 pub enum DocumentColor {}
 
 impl Request for DocumentColor {
-    type Params = DocumentColorParams;
-    type Result = Vec<ColorInformation>;
+    type Params = crate::DocumentColorParams;
+    type Result = Vec<crate::ColorInformation>;
     const METHOD: &'static str = "textDocument/documentColor";
 }
 
@@ -634,8 +635,8 @@ impl Request for DocumentColor {
 pub enum ColorPresentationRequest {}
 
 impl Request for ColorPresentationRequest {
-    type Params = ColorPresentationParams;
-    type Result = Vec<ColorPresentation>;
+    type Params = crate::ColorPresentationParams;
+    type Result = Vec<crate::ColorPresentation>;
     const METHOD: &'static str = "textDocument/colorPresentation";
 }
 
@@ -644,8 +645,8 @@ impl Request for ColorPresentationRequest {
 pub enum FoldingRangeRequest {}
 
 impl Request for FoldingRangeRequest {
-    type Params = FoldingRangeParams;
-    type Result = Option<Vec<FoldingRange>>;
+    type Params = crate::FoldingRangeParams;
+    type Result = Option<Vec<crate::FoldingRange>>;
     const METHOD: &'static str = "textDocument/foldingRange";
 }
 
@@ -655,8 +656,8 @@ impl Request for FoldingRangeRequest {
 pub enum PrepareRenameRequest {}
 
 impl Request for PrepareRenameRequest {
-    type Params = TextDocumentPositionParams;
-    type Result = Option<PrepareRenameResponse>;
+    type Params = crate::TextDocumentPositionParams;
+    type Result = Option<crate::PrepareRenameResponse>;
     const METHOD: &'static str = "textDocument/prepareRename";
 }
 
@@ -666,8 +667,8 @@ pub enum InlineCompletionRequest {}
 
 #[cfg(feature = "proposed")]
 impl Request for InlineCompletionRequest {
-    type Params = InlineCompletionParams;
-    type Result = Option<InlineCompletionResponse>;
+    type Params = crate::InlineCompletionParams;
+    type Result = Option<crate::InlineCompletionResponse>;
     const METHOD: &'static str = "textDocument/inlineCompletion";
 }
 
@@ -679,7 +680,7 @@ pub enum WorkspaceFoldersRequest {}
 
 impl Request for WorkspaceFoldersRequest {
     type Params = ();
-    type Result = Option<Vec<WorkspaceFolder>>;
+    type Result = Option<Vec<crate::WorkspaceFolder>>;
     const METHOD: &'static str = "workspace/workspaceFolders";
 }
 
@@ -689,7 +690,7 @@ impl Request for WorkspaceFoldersRequest {
 pub enum WorkDoneProgressCreate {}
 
 impl Request for WorkDoneProgressCreate {
-    type Params = WorkDoneProgressCreateParams;
+    type Params = crate::WorkDoneProgressCreateParams;
     type Result = ();
     const METHOD: &'static str = "window/workDoneProgress/create";
 }
@@ -706,60 +707,61 @@ impl Request for WorkDoneProgressCreate {
 pub enum SelectionRangeRequest {}
 
 impl Request for SelectionRangeRequest {
-    type Params = SelectionRangeParams;
-    type Result = Option<Vec<SelectionRange>>;
+    type Params = crate::SelectionRangeParams;
+    type Result = Option<Vec<crate::SelectionRange>>;
     const METHOD: &'static str = "textDocument/selectionRange";
 }
 
 pub enum CallHierarchyPrepare {}
 
 impl Request for CallHierarchyPrepare {
-    type Params = CallHierarchyPrepareParams;
-    type Result = Option<Vec<CallHierarchyItem>>;
+    type Params = crate::CallHierarchyPrepareParams;
+    type Result = Option<Vec<crate::CallHierarchyItem>>;
     const METHOD: &'static str = "textDocument/prepareCallHierarchy";
 }
 
 pub enum CallHierarchyIncomingCalls {}
 
 impl Request for CallHierarchyIncomingCalls {
-    type Params = CallHierarchyIncomingCallsParams;
-    type Result = Option<Vec<CallHierarchyIncomingCall>>;
+    type Params = crate::CallHierarchyIncomingCallsParams;
+    type Result = Option<Vec<crate::CallHierarchyIncomingCall>>;
     const METHOD: &'static str = "callHierarchy/incomingCalls";
 }
 
 pub enum CallHierarchyOutgoingCalls {}
 
 impl Request for CallHierarchyOutgoingCalls {
-    type Params = CallHierarchyOutgoingCallsParams;
-    type Result = Option<Vec<CallHierarchyOutgoingCall>>;
+    type Params = crate::CallHierarchyOutgoingCallsParams;
+    type Result = Option<Vec<crate::CallHierarchyOutgoingCall>>;
     const METHOD: &'static str = "callHierarchy/outgoingCalls";
 }
 
 pub enum SemanticTokensFullRequest {}
 
 impl Request for SemanticTokensFullRequest {
-    type Params = SemanticTokensParams;
-    type Result = Option<SemanticTokensResult>;
+    type Params = crate::SemanticTokensParams;
+    type Result = Option<crate::SemanticTokensResult>;
     const METHOD: &'static str = "textDocument/semanticTokens/full";
 }
 
 pub enum SemanticTokensFullDeltaRequest {}
 
 impl Request for SemanticTokensFullDeltaRequest {
-    type Params = SemanticTokensDeltaParams;
-    type Result = Option<SemanticTokensFullDeltaResult>;
+    type Params = crate::SemanticTokensDeltaParams;
+    type Result = Option<crate::SemanticTokensFullDeltaResult>;
     const METHOD: &'static str = "textDocument/semanticTokens/full/delta";
 }
 
 pub enum SemanticTokensRangeRequest {}
 
 impl Request for SemanticTokensRangeRequest {
-    type Params = SemanticTokensRangeParams;
-    type Result = Option<SemanticTokensRangeResult>;
+    type Params = crate::SemanticTokensRangeParams;
+    type Result = Option<crate::SemanticTokensRangeResult>;
     const METHOD: &'static str = "textDocument/semanticTokens/range";
 }
 
 /// The `workspace/semanticTokens/refresh` request is sent from the server to the client.
+///
 /// Servers can use it to ask clients to refresh the editors for which this server provides semantic tokens.
 /// As a result the client should ask the server to recompute the semantic tokens for these editors.
 /// This is useful if a server detects a project wide configuration change which requires a re-calculation of all semantic tokens.
@@ -773,6 +775,7 @@ impl Request for SemanticTokensRefresh {
 }
 
 /// The workspace/codeLens/refresh request is sent from the server to the client.
+///
 /// Servers can use it to ask clients to refresh the code lenses currently shown in editors.
 /// As a result the client should ask the server to recompute the code lenses for these editors.
 /// This is useful if a server detects a configuration change which requires a re-calculation of all code lenses.
@@ -785,30 +788,35 @@ impl Request for CodeLensRefresh {
     const METHOD: &'static str = "workspace/codeLens/refresh";
 }
 
-/// The will create files request is sent from the client to the server before files are actually created as long as the creation is triggered from within the client. The request can return a WorkspaceEdit which will be applied to workspace before the files are created. Please note that clients might drop results if computing the edit took too long or if a server constantly fails on this request. This is done to keep creates fast and reliable.
+/// The will create files request is sent from the client to the server before
+/// files are actually created as long as the creation is triggered from within
+/// the client. The request can return a `WorkspaceEdit` which will be applied to
+/// workspace before the files are created. Please note that clients might drop
+/// results if computing the edit took too long or if a server constantly fails on
+/// this request. This is done to keep creates fast and reliable.
 pub enum WillCreateFiles {}
 
 impl Request for WillCreateFiles {
-    type Params = CreateFilesParams;
-    type Result = Option<WorkspaceEdit>;
+    type Params = crate::CreateFilesParams;
+    type Result = Option<crate::WorkspaceEdit>;
     const METHOD: &'static str = "workspace/willCreateFiles";
 }
 
-/// The will rename files request is sent from the client to the server before files are actually renamed as long as the rename is triggered from within the client. The request can return a WorkspaceEdit which will be applied to workspace before the files are renamed. Please note that clients might drop results if computing the edit took too long or if a server constantly fails on this request. This is done to keep renames fast and reliable.
+/// The will rename files request is sent from the client to the server before files are actually renamed as long as the rename is triggered from within the client. The request can return a `WorkspaceEdit` which will be applied to workspace before the files are renamed. Please note that clients might drop results if computing the edit took too long or if a server constantly fails on this request. This is done to keep renames fast and reliable.
 pub enum WillRenameFiles {}
 
 impl Request for WillRenameFiles {
-    type Params = RenameFilesParams;
-    type Result = Option<WorkspaceEdit>;
+    type Params = crate::RenameFilesParams;
+    type Result = Option<crate::WorkspaceEdit>;
     const METHOD: &'static str = "workspace/willRenameFiles";
 }
 
-/// The will delete files request is sent from the client to the server before files are actually deleted as long as the deletion is triggered from within the client. The request can return a WorkspaceEdit which will be applied to workspace before the files are deleted. Please note that clients might drop results if computing the edit took too long or if a server constantly fails on this request. This is done to keep deletes fast and reliable.
+/// The will delete files request is sent from the client to the server before files are actually deleted as long as the deletion is triggered from within the client. The request can return a `WorkspaceEdit` which will be applied to workspace before the files are deleted. Please note that clients might drop results if computing the edit took too long or if a server constantly fails on this request. This is done to keep deletes fast and reliable.
 pub enum WillDeleteFiles {}
 
 impl Request for WillDeleteFiles {
-    type Params = DeleteFilesParams;
-    type Result = Option<WorkspaceEdit>;
+    type Params = crate::DeleteFilesParams;
+    type Result = Option<crate::WorkspaceEdit>;
     const METHOD: &'static str = "workspace/willDeleteFiles";
 }
 
@@ -816,16 +824,16 @@ impl Request for WillDeleteFiles {
 pub enum ShowDocument {}
 
 impl Request for ShowDocument {
-    type Params = ShowDocumentParams;
-    type Result = ShowDocumentResult;
+    type Params = crate::ShowDocumentParams;
+    type Result = crate::ShowDocumentResult;
     const METHOD: &'static str = "window/showDocument";
 }
 
 pub enum MonikerRequest {}
 
 impl Request for MonikerRequest {
-    type Params = MonikerParams;
-    type Result = Option<Vec<Moniker>>;
+    type Params = crate::MonikerParams;
+    type Result = Option<Vec<crate::Moniker>>;
     const METHOD: &'static str = "textDocument/moniker";
 }
 
@@ -834,8 +842,8 @@ impl Request for MonikerRequest {
 pub enum InlayHintRequest {}
 
 impl Request for InlayHintRequest {
-    type Params = InlayHintParams;
-    type Result = Option<Vec<InlayHint>>;
+    type Params = crate::InlayHintParams;
+    type Result = Option<Vec<crate::InlayHint>>;
     const METHOD: &'static str = "textDocument/inlayHint";
 }
 
@@ -846,8 +854,8 @@ impl Request for InlayHintRequest {
 pub enum InlayHintResolveRequest {}
 
 impl Request for InlayHintResolveRequest {
-    type Params = InlayHint;
-    type Result = InlayHint;
+    type Params = crate::InlayHint;
+    type Result = crate::InlayHint;
     const METHOD: &'static str = "inlayHint/resolve";
 }
 
@@ -870,8 +878,8 @@ impl Request for InlayHintRefreshRequest {
 pub enum InlineValueRequest {}
 
 impl Request for InlineValueRequest {
-    type Params = InlineValueParams;
-    type Result = Option<Vec<InlineValue>>;
+    type Params = crate::InlineValueParams;
+    type Result = Option<Vec<crate::InlineValue>>;
     const METHOD: &'static str = "textDocument/inlineValue";
 }
 
@@ -896,8 +904,8 @@ impl Request for InlineValueRefreshRequest {
 pub enum DocumentDiagnosticRequest {}
 
 impl Request for DocumentDiagnosticRequest {
-    type Params = DocumentDiagnosticParams;
-    type Result = DocumentDiagnosticReportResult;
+    type Params = crate::DocumentDiagnosticParams;
+    type Result = crate::DocumentDiagnosticReportResult;
     const METHOD: &'static str = "textDocument/diagnostic";
 }
 
@@ -911,9 +919,9 @@ impl Request for DocumentDiagnosticRequest {
 pub enum WorkspaceDiagnosticRequest {}
 
 impl Request for WorkspaceDiagnosticRequest {
-    type Params = WorkspaceDiagnosticParams;
+    type Params = crate::WorkspaceDiagnosticParams;
     const METHOD: &'static str = "workspace/diagnostic";
-    type Result = WorkspaceDiagnosticReportResult;
+    type Result = crate::WorkspaceDiagnosticReportResult;
 }
 
 /// The `workspace/diagnostic/refresh` request is sent from the server to the client. Servers can
@@ -938,8 +946,8 @@ impl Request for WorkspaceDiagnosticRefresh {
 pub enum TypeHierarchyPrepare {}
 
 impl Request for TypeHierarchyPrepare {
-    type Params = TypeHierarchyPrepareParams;
-    type Result = Option<Vec<TypeHierarchyItem>>;
+    type Params = crate::TypeHierarchyPrepareParams;
+    type Result = Option<Vec<crate::TypeHierarchyItem>>;
     const METHOD: &'static str = "textDocument/prepareTypeHierarchy";
 }
 
@@ -951,8 +959,8 @@ impl Request for TypeHierarchyPrepare {
 pub enum TypeHierarchySupertypes {}
 
 impl Request for TypeHierarchySupertypes {
-    type Params = TypeHierarchySupertypesParams;
-    type Result = Option<Vec<TypeHierarchyItem>>;
+    type Params = crate::TypeHierarchySupertypesParams;
+    type Result = Option<Vec<crate::TypeHierarchyItem>>;
     const METHOD: &'static str = "typeHierarchy/supertypes";
 }
 
@@ -963,8 +971,8 @@ impl Request for TypeHierarchySupertypes {
 pub enum TypeHierarchySubtypes {}
 
 impl Request for TypeHierarchySubtypes {
-    type Params = TypeHierarchySubtypesParams;
-    type Result = Option<Vec<TypeHierarchyItem>>;
+    type Params = crate::TypeHierarchySubtypesParams;
+    type Result = Option<Vec<crate::TypeHierarchyItem>>;
     const METHOD: &'static str = "typeHierarchy/subtypes";
 }
 

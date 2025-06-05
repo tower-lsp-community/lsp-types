@@ -59,8 +59,8 @@ pub struct DocumentLink {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tooltip: Option<String>,
 
-    /// A data entry field that is preserved on a document link between a DocumentLinkRequest
-    /// and a DocumentLinkResolveRequest.
+    /// A data entry field that is preserved on a document link between a `DocumentLinkRequest`
+    /// and a `DocumentLinkResolveRequest`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<Value>,
 }

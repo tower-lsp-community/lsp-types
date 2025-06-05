@@ -6,7 +6,7 @@ pub struct SetTraceParams {
     pub value: TraceValue,
 }
 
-/// A TraceValue represents the level of verbosity with which the server systematically
+/// A `TraceValue` represents the level of verbosity with which the server systematically
 /// reports its execution trace using `LogTrace` notifications.
 ///
 /// The initial trace value is set by the client at initialization and can be modified

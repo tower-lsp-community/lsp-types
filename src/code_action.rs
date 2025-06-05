@@ -106,7 +106,7 @@ pub struct CodeActionKindLiteralSupport {
     pub value_set: Vec<String>,
 }
 
-/// Params for the CodeActionRequest
+/// Params for the `CodeActionRequest`
 #[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodeActionParams {
@@ -126,10 +126,10 @@ pub struct CodeActionParams {
     pub partial_result_params: PartialResultParams,
 }
 
-/// response for CodeActionRequest
+/// Response for `CodeActionRequest`
 pub type CodeActionResponse = Vec<CodeActionOrCommand>;
 
-#[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum CodeActionOrCommand {
     Command(Command),
@@ -138,13 +138,13 @@ pub enum CodeActionOrCommand {
 
 impl From<Command> for CodeActionOrCommand {
     fn from(command: Command) -> Self {
-        CodeActionOrCommand::Command(command)
+        Self::Command(command)
     }
 }
 
 impl From<CodeAction> for CodeActionOrCommand {
     fn from(action: CodeAction) -> Self {
-        CodeActionOrCommand::CodeAction(action)
+        Self::CodeAction(action)
     }
 }
 
@@ -153,13 +153,13 @@ pub struct CodeActionKind(Cow<'static, str>);
 
 impl CodeActionKind {
     /// Empty kind.
-    pub const EMPTY: CodeActionKind = CodeActionKind::new("");
+    pub const EMPTY: Self = Self::new("");
 
     /// Base kind for quickfix actions: 'quickfix'
-    pub const QUICKFIX: CodeActionKind = CodeActionKind::new("quickfix");
+    pub const QUICKFIX: Self = Self::new("quickfix");
 
     /// Base kind for refactoring actions: 'refactor'
-    pub const REFACTOR: CodeActionKind = CodeActionKind::new("refactor");
+    pub const REFACTOR: Self = Self::new("refactor");
 
     /// Base kind for refactoring extraction actions: 'refactor.extract'
     ///
@@ -170,7 +170,7 @@ impl CodeActionKind {
     /// - Extract variable
     /// - Extract interface from class
     /// - ...
-    pub const REFACTOR_EXTRACT: CodeActionKind = CodeActionKind::new("refactor.extract");
+    pub const REFACTOR_EXTRACT: Self = Self::new("refactor.extract");
 
     /// Base kind for refactoring inline actions: 'refactor.inline'
     ///
@@ -180,7 +180,7 @@ impl CodeActionKind {
     /// - Inline variable
     /// - Inline constant
     /// - ...
-    pub const REFACTOR_INLINE: CodeActionKind = CodeActionKind::new("refactor.inline");
+    pub const REFACTOR_INLINE: Self = Self::new("refactor.inline");
 
     /// Base kind for refactoring rewrite actions: 'refactor.rewrite'
     ///
@@ -192,16 +192,15 @@ impl CodeActionKind {
     /// - Make method static
     /// - Move method to base class
     /// - ...
-    pub const REFACTOR_REWRITE: CodeActionKind = CodeActionKind::new("refactor.rewrite");
+    pub const REFACTOR_REWRITE: Self = Self::new("refactor.rewrite");
 
     /// Base kind for source actions: `source`
     ///
     /// Source code actions apply to the entire file.
-    pub const SOURCE: CodeActionKind = CodeActionKind::new("source");
+    pub const SOURCE: Self = Self::new("source");
 
     /// Base kind for an organize imports source action: `source.organizeImports`
-    pub const SOURCE_ORGANIZE_IMPORTS: CodeActionKind =
-        CodeActionKind::new("source.organizeImports");
+    pub const SOURCE_ORGANIZE_IMPORTS: Self = Self::new("source.organizeImports");
 
     /// Base kind for a 'fix all' source action: `source.fixAll`.
     ///
@@ -210,12 +209,14 @@ impl CodeActionKind {
     /// unsafe fixes such as generating new types or classes.
     ///
     /// @since 3.17.0
-    pub const SOURCE_FIX_ALL: CodeActionKind = CodeActionKind::new("source.fixAll");
+    pub const SOURCE_FIX_ALL: Self = Self::new("source.fixAll");
 
+    #[must_use]
     pub const fn new(tag: &'static str) -> Self {
-        CodeActionKind(Cow::Borrowed(tag))
+        Self(Cow::Borrowed(tag))
     }
 
+    #[must_use]
     pub fn as_str(&self) -> &str {
         &self.0
     }
@@ -223,17 +224,17 @@ impl CodeActionKind {
 
 impl From<String> for CodeActionKind {
     fn from(from: String) -> Self {
-        CodeActionKind(Cow::from(from))
+        Self(Cow::from(from))
     }
 }
 
 impl From<&'static str> for CodeActionKind {
     fn from(from: &'static str) -> Self {
-        CodeActionKind::new(from)
+        Self::new(from)
     }
 }
 
-#[derive(Debug, PartialEq, Clone, Default, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodeAction {
     /// A short, human-readable, title for this code action.
@@ -347,7 +348,7 @@ pub struct CodeActionContext {
 #[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct CodeActionOptions {
-    /// CodeActionKinds that this server may return.
+    /// `CodeActionKinds` that this server may return.
     ///
     /// The list of kinds may be generic, such as `CodeActionKind.Refactor`, or the server
     /// may list out every specific kind they provide.
@@ -390,6 +391,6 @@ mod tests {
                 }),
             ],
             r#"[{"title":"title","command":"command"},{"title":"title","kind":"quickfix"}]"#,
-        )
+        );
     }
 }

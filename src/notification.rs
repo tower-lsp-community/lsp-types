@@ -1,4 +1,12 @@
-use super::*;
+use super::{
+    CancelParams, CreateFilesParams, Debug, DeleteFilesParams, DidChangeConfigurationParams,
+    DidChangeNotebookDocumentParams, DidChangeTextDocumentParams, DidChangeWatchedFilesParams,
+    DidChangeWorkspaceFoldersParams, DidCloseNotebookDocumentParams, DidCloseTextDocumentParams,
+    DidOpenNotebookDocumentParams, DidOpenTextDocumentParams, DidSaveNotebookDocumentParams,
+    DidSaveTextDocumentParams, InitializedParams, LSPArray, LSPObject, LogMessageParams,
+    LogTraceParams, OneOf, ProgressParams, PublishDiagnosticsParams, RenameFilesParams,
+    SetTraceParams, ShowMessageParams, WillSaveTextDocumentParams, WorkDoneProgressCancelParams,
+};
 
 use serde::{Serialize, de::DeserializeOwned};
 
@@ -174,6 +182,7 @@ impl Notification for LogMessage {
 }
 
 /// The telemetry notification is sent from the server to the client to ask the client to log a telemetry event.
+///
 /// The protocol doesn't specify the payload since no interpretation of the data happens in the protocol. Most clients even don't handle
 /// the event directly but forward them to the extensions owning the corresponding server issuing the event.
 #[derive(Debug)]
@@ -194,6 +203,7 @@ impl Notification for DidChangeConfiguration {
 }
 
 /// The document open notification is sent from the client to the server to signal newly opened text documents.
+///
 /// The document's truth is now managed by the client and the server must not try to read the document's truth
 /// using the document's uri.
 #[derive(Debug)]
@@ -205,6 +215,7 @@ impl Notification for DidOpenTextDocument {
 }
 
 /// The document change notification is sent from the client to the server to signal changes to a text document.
+///
 /// In 2.0 the shape of the params has changed to include proper version numbers and language ids.
 #[derive(Debug)]
 pub enum DidChangeTextDocument {}
@@ -225,6 +236,7 @@ impl Notification for WillSaveTextDocument {
 }
 
 /// The document close notification is sent from the client to the server when the document got closed in the client.
+///
 /// The document's truth now exists where the document's uri points to (e.g. if the document's uri is a file uri
 /// the truth now exists on disk).
 #[derive(Debug)]

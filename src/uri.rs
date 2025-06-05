@@ -2,7 +2,7 @@ use std::{hash::Hash, ops::Deref, str::FromStr};
 
 use serde::{Deserialize, Serialize, de::Error};
 
-/// Newtype struct around `fluent_uri::Uri<String>` with serialization implementations that use `as_str()` and 'from_str()' respectively.
+/// Newtype struct around `fluent_uri::Uri<String>` with serialization implementations that use `as_str()` and '`from_str()`' respectively.
 #[derive(Debug, Clone)]
 pub struct Uri(fluent_uri::Uri<String>);
 
@@ -75,6 +75,6 @@ impl Eq for Uri {}
 
 impl Hash for Uri {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.as_str().hash(state)
+        self.as_str().hash(state);
     }
 }

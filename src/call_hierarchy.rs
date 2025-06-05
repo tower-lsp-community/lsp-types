@@ -76,7 +76,7 @@ pub struct CallHierarchyItem {
     pub data: Option<Value>,
 }
 
-#[derive(Debug, PartialEq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CallHierarchyIncomingCallsParams {
     pub item: CallHierarchyItem,
@@ -89,7 +89,7 @@ pub struct CallHierarchyIncomingCallsParams {
 }
 
 /// Represents an incoming call, e.g. a caller of a method or constructor.
-#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CallHierarchyIncomingCall {
     /// The item that makes the call.
@@ -100,7 +100,7 @@ pub struct CallHierarchyIncomingCall {
     pub from_ranges: Vec<Range>,
 }
 
-#[derive(Debug, PartialEq, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CallHierarchyOutgoingCallsParams {
     pub item: CallHierarchyItem,
@@ -113,7 +113,7 @@ pub struct CallHierarchyOutgoingCallsParams {
 }
 
 /// Represents an outgoing call, e.g. calling a getter from a method or a method from a constructor etc.
-#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CallHierarchyOutgoingCall {
     /// The item that is called.

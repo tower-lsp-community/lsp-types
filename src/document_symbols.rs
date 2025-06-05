@@ -35,7 +35,7 @@ pub struct DocumentSymbolClientCapabilities {
     pub tag_support: Option<TagSupport<SymbolTag>>,
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum DocumentSymbolResponse {
     Flat(Vec<SymbolInformation>),
@@ -44,13 +44,13 @@ pub enum DocumentSymbolResponse {
 
 impl From<Vec<SymbolInformation>> for DocumentSymbolResponse {
     fn from(info: Vec<SymbolInformation>) -> Self {
-        DocumentSymbolResponse::Flat(info)
+        Self::Flat(info)
     }
 }
 
 impl From<Vec<DocumentSymbol>> for DocumentSymbolResponse {
     fn from(symbols: Vec<DocumentSymbol>) -> Self {
-        DocumentSymbolResponse::Nested(symbols)
+        Self::Nested(symbols)
     }
 }
 
@@ -68,6 +68,7 @@ pub struct DocumentSymbolParams {
 }
 
 /// Represents programming constructs like variables, classes, interfaces etc.
+///
 /// that appear in a document. Document symbols can be hierarchical and they have two ranges:
 /// one that encloses its definition and one that points to its most interesting range,
 /// e.g. the range of an identifier.
