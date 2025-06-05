@@ -1,18 +1,45 @@
-# lsp-types [![Build Status](https://travis-ci.org/gluon-lang/lsp-types.svg?branch=master)](https://travis-ci.org/gluon-lang/lsp-types) [![Documentation](https://docs.rs/lsp-types/badge.svg)](https://docs.rs/crate/lsp-types)
+# lsp-types
 
-Types useful for interacting with a [language server](https://code.visualstudio.com/blogs/2016/06/27/common-language-protocol).
+[![CI][ci-badge]][ci-url]
+<!-- [![Crates.io][crates-badge]][crates-url] -->
+<!-- [![Documentation][docs-badge]][docs-url] -->
 
-Supports Language Server Protocol (LSP) version 3.16.0.
+[ci-badge]: https://github.com/tower-lsp-community/lsp-types/actions/workflows/rust.yml/badge.svg?branch=main
+[ci-url]: https://github.com/tower-lsp-community/lsp-types/actions
+<!-- [crates-badge]: https://img.shields.io/crates/v/lsp-types.svg -->
+<!-- [crates-url]: https://crates.io/crates/tower-lsp-server -->
+<!-- [docs-badge]: https://docs.rs/tower-lsp-server/badge.svg -->
+<!-- [docs-url]: https://docs.rs/tower-lsp-server -->
 
-Proposed 3.17 features can be activated using the `proposed` feature flag.
-- **NOTE** that these are unstable and may change between releases.
+*A fork of [lsp-types](https://github.com/gluon-lang/lsp-types)*
 
-## Contributing
+- [Projects using `lsp-types`](#projects-using-lsp-types)
+- [Contributing](#contributing)
+- [License](#license)
 
-If you are making a change which adds, removes or modifies the LSP API it is highly appreciated if you link to the spec where this change is described. This gives context to whether the change should be an experimental addition and lets the reviewer double check the changes easily against the spec.
 
-## Links
+Types for the [Language Server Protocol] (*LSP*) specification and the [Language Server Index Format] (*LSIF*) specification.
 
-[Stable Protocol reference](https://github.com/microsoft/language-server-protocol/tree/gh-pages/_specifications/lsp/3.17/specification.md)
+[Language Server Protocol]: https://microsoft.github.io/language-server-protocol/
+[Language Server Index Format]: https://microsoft.github.io/language-server-protocol/specifications/lsif/0.6.0/specification/
 
-[Proposed Protocol reference](https://github.com/microsoft/language-server-protocol/blob/gh-pages/_specifications/lsp/3.18/specification.md)
+Supports LSP version [*3.17*]. Proposed version [*3.18*] features can be activated using the `proposed` feature flag.
+> **NOTE** that these are unstable and may change between releases.
+
+[*3.17*]: https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification
+[*3.18*]: https://microsoft.github.io/language-server-protocol/specifications/lsp/3.18/specification
+
+# Projects using `lsp-types`
+
+- [tower-lsp-server](https://github.com/tower-lsp-community/tower-lsp-server)
+
+# Contributing
+
+If you are making a change which adds, removes or modifies the LSP API it is highly appreciated if you link to the spec where this change is described. This gives context to whether the change should be an experimental addition and lets the reviewer easily double check the changes against the spec.
+
+# License
+
+`lsp-types` is free and open source software distributed under the terms of either the [MIT](LICENSE-MIT) or the [Apache 2.0](LICENSE-APACHE) license, at your option.
+
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
+
