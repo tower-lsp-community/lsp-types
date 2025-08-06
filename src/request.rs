@@ -1,5 +1,7 @@
 use serde::{Serialize, de::DeserializeOwned};
 
+use crate::lsp;
+
 pub trait Request {
     type Params: DeserializeOwned + Serialize + Send + Sync + 'static;
     type Result: DeserializeOwned + Serialize + Send + Sync + 'static;
@@ -216,8 +218,8 @@ macro_rules! lsp_request {
 pub enum Initialize {}
 
 impl Request for Initialize {
-    type Params = crate::InitializeParams;
-    type Result = crate::InitializeResult;
+    type Params = lsp::InitializeParams;
+    type Result = lsp::InitializeResult;
     const METHOD: &'static str = "initialize";
 }
 
@@ -240,8 +242,8 @@ impl Request for Shutdown {
 pub enum ShowMessageRequest {}
 
 impl Request for ShowMessageRequest {
-    type Params = crate::ShowMessageRequestParams;
-    type Result = Option<crate::MessageActionItem>;
+    type Params = lsp::ShowMessageRequestParams;
+    type Result = Option<lsp::MessageActionItem>;
     const METHOD: &'static str = "window/showMessageRequest";
 }
 
@@ -252,7 +254,7 @@ impl Request for ShowMessageRequest {
 pub enum RegisterCapability {}
 
 impl Request for RegisterCapability {
-    type Params = crate::RegistrationParams;
+    type Params = lsp::RegistrationParams;
     type Result = ();
     const METHOD: &'static str = "client/registerCapability";
 }
@@ -263,7 +265,7 @@ impl Request for RegisterCapability {
 pub enum UnregisterCapability {}
 
 impl Request for UnregisterCapability {
-    type Params = crate::UnregistrationParams;
+    type Params = lsp::UnregistrationParams;
     type Result = ();
     const METHOD: &'static str = "client/unregisterCapability";
 }
@@ -283,8 +285,8 @@ impl Request for UnregisterCapability {
 pub enum Completion {}
 
 impl Request for Completion {
-    type Params = crate::CompletionParams;
-    type Result = Option<crate::CompletionResponse>;
+    type Params = lsp::CompletionParams;
+    type Result = Option<lsp::CompletionResponse>;
     const METHOD: &'static str = "textDocument/completion";
 }
 
@@ -293,8 +295,8 @@ impl Request for Completion {
 pub enum ResolveCompletionItem {}
 
 impl Request for ResolveCompletionItem {
-    type Params = crate::CompletionItem;
-    type Result = crate::CompletionItem;
+    type Params = lsp::CompletionItem;
+    type Result = lsp::CompletionItem;
     const METHOD: &'static str = "completionItem/resolve";
 }
 
@@ -304,8 +306,8 @@ impl Request for ResolveCompletionItem {
 pub enum HoverRequest {}
 
 impl Request for HoverRequest {
-    type Params = crate::HoverParams;
-    type Result = Option<crate::Hover>;
+    type Params = lsp::HoverParams;
+    type Result = Option<lsp::Hover>;
     const METHOD: &'static str = "textDocument/hover";
 }
 
@@ -315,15 +317,15 @@ impl Request for HoverRequest {
 pub enum SignatureHelpRequest {}
 
 impl Request for SignatureHelpRequest {
-    type Params = crate::SignatureHelpParams;
-    type Result = Option<crate::SignatureHelp>;
+    type Params = lsp::SignatureHelpParams;
+    type Result = Option<lsp::SignatureHelp>;
     const METHOD: &'static str = "textDocument/signatureHelp";
 }
 
 #[derive(Debug)]
 pub enum GotoDeclaration {}
-pub type GotoDeclarationParams = crate::GotoDefinitionParams;
-pub type GotoDeclarationResponse = crate::GotoDefinitionResponse;
+pub type GotoDeclarationParams = lsp::GotoDefinitionParams;
+pub type GotoDeclarationResponse = lsp::GotoDefinitionResponse;
 
 /// The goto declaration request is sent from the client to the server to resolve the declaration location of
 /// a symbol at a given text document position.
@@ -339,8 +341,8 @@ impl Request for GotoDeclaration {
 pub enum GotoDefinition {}
 
 impl Request for GotoDefinition {
-    type Params = crate::GotoDefinitionParams;
-    type Result = Option<crate::GotoDefinitionResponse>;
+    type Params = lsp::GotoDefinitionParams;
+    type Result = Option<lsp::GotoDefinitionResponse>;
     const METHOD: &'static str = "textDocument/definition";
 }
 
@@ -350,8 +352,8 @@ impl Request for GotoDefinition {
 pub enum References {}
 
 impl Request for References {
-    type Params = crate::ReferenceParams;
-    type Result = Option<Vec<crate::Location>>;
+    type Params = lsp::ReferenceParams;
+    type Result = Option<Vec<lsp::Location>>;
     const METHOD: &'static str = "textDocument/references";
 }
 
@@ -361,8 +363,8 @@ impl Request for References {
 #[derive(Debug)]
 pub enum GotoTypeDefinition {}
 
-pub type GotoTypeDefinitionParams = crate::GotoDefinitionParams;
-pub type GotoTypeDefinitionResponse = crate::GotoDefinitionResponse;
+pub type GotoTypeDefinitionParams = lsp::GotoDefinitionParams;
+pub type GotoTypeDefinitionResponse = lsp::GotoDefinitionResponse;
 
 impl Request for GotoTypeDefinition {
     type Params = GotoTypeDefinitionParams;
@@ -377,7 +379,7 @@ impl Request for GotoTypeDefinition {
 pub enum GotoImplementation {}
 
 pub type GotoImplementationParams = GotoTypeDefinitionParams;
-pub type GotoImplementationResponse = crate::GotoDefinitionResponse;
+pub type GotoImplementationResponse = lsp::GotoDefinitionResponse;
 
 impl Request for GotoImplementation {
     type Params = GotoImplementationParams;
@@ -396,8 +398,8 @@ impl Request for GotoImplementation {
 pub enum DocumentHighlightRequest {}
 
 impl Request for DocumentHighlightRequest {
-    type Params = crate::DocumentHighlightParams;
-    type Result = Option<Vec<crate::DocumentHighlight>>;
+    type Params = lsp::DocumentHighlightParams;
+    type Result = Option<Vec<lsp::DocumentHighlight>>;
     const METHOD: &'static str = "textDocument/documentHighlight";
 }
 
@@ -407,8 +409,8 @@ impl Request for DocumentHighlightRequest {
 pub enum DocumentSymbolRequest {}
 
 impl Request for DocumentSymbolRequest {
-    type Params = crate::DocumentSymbolParams;
-    type Result = Option<crate::DocumentSymbolResponse>;
+    type Params = lsp::DocumentSymbolParams;
+    type Result = Option<lsp::DocumentSymbolResponse>;
     const METHOD: &'static str = "textDocument/documentSymbol";
 }
 
@@ -418,8 +420,8 @@ impl Request for DocumentSymbolRequest {
 pub enum WorkspaceSymbolRequest {}
 
 impl Request for WorkspaceSymbolRequest {
-    type Params = crate::WorkspaceSymbolParams;
-    type Result = Option<crate::WorkspaceSymbolResponse>;
+    type Params = lsp::WorkspaceSymbolParams;
+    type Result = Option<lsp::WorkspaceSymbolResponse>;
     const METHOD: &'static str = "workspace/symbol";
 }
 
@@ -429,8 +431,8 @@ impl Request for WorkspaceSymbolRequest {
 pub enum WorkspaceSymbolResolve {}
 
 impl Request for WorkspaceSymbolResolve {
-    type Params = crate::WorkspaceSymbol;
-    type Result = crate::WorkspaceSymbol;
+    type Params = lsp::WorkspaceSymbol;
+    type Result = lsp::WorkspaceSymbol;
     const METHOD: &'static str = "workspaceSymbol/resolve";
 }
 
@@ -442,8 +444,8 @@ impl Request for WorkspaceSymbolResolve {
 pub enum ExecuteCommand {}
 
 impl Request for ExecuteCommand {
-    type Params = crate::ExecuteCommandParams;
-    type Result = Option<crate::Value>;
+    type Params = lsp::ExecuteCommandParams;
+    type Result = Option<serde_json::Value>;
     const METHOD: &'static str = "workspace/executeCommand";
 }
 
@@ -456,8 +458,8 @@ impl Request for ExecuteCommand {
 pub enum WillSaveWaitUntil {}
 
 impl Request for WillSaveWaitUntil {
-    type Params = crate::WillSaveTextDocumentParams;
-    type Result = Option<Vec<crate::TextEdit>>;
+    type Params = lsp::WillSaveTextDocumentParams;
+    type Result = Option<Vec<lsp::TextEdit>>;
     const METHOD: &'static str = "textDocument/willSaveWaitUntil";
 }
 
@@ -467,8 +469,8 @@ impl Request for WillSaveWaitUntil {
 pub enum ApplyWorkspaceEdit {}
 
 impl Request for ApplyWorkspaceEdit {
-    type Params = crate::ApplyWorkspaceEditParams;
-    type Result = crate::ApplyWorkspaceEditResponse;
+    type Params = lsp::ApplyWorkspaceEditParams;
+    type Result = lsp::ApplyWorkspaceEditResponse;
     const METHOD: &'static str = "workspace/applyEdit";
 }
 
@@ -489,8 +491,8 @@ impl Request for ApplyWorkspaceEdit {
 pub enum WorkspaceConfiguration {}
 
 impl Request for WorkspaceConfiguration {
-    type Params = crate::ConfigurationParams;
-    type Result = Vec<crate::Value>;
+    type Params = lsp::ConfigurationParams;
+    type Result = Vec<serde_json::Value>;
     const METHOD: &'static str = "workspace/configuration";
 }
 
@@ -501,8 +503,8 @@ impl Request for WorkspaceConfiguration {
 pub enum CodeActionRequest {}
 
 impl Request for CodeActionRequest {
-    type Params = crate::CodeActionParams;
-    type Result = Option<crate::CodeActionResponse>;
+    type Params = lsp::CodeActionParams;
+    type Result = Option<lsp::CodeActionResponse>;
     const METHOD: &'static str = "textDocument/codeAction";
 }
 
@@ -516,8 +518,8 @@ impl Request for CodeActionRequest {
 pub enum CodeActionResolveRequest {}
 
 impl Request for CodeActionResolveRequest {
-    type Params = crate::CodeAction;
-    type Result = crate::CodeAction;
+    type Params = lsp::CodeAction;
+    type Result = lsp::CodeAction;
     const METHOD: &'static str = "codeAction/resolve";
 }
 
@@ -526,8 +528,8 @@ impl Request for CodeActionResolveRequest {
 pub enum CodeLensRequest {}
 
 impl Request for CodeLensRequest {
-    type Params = crate::CodeLensParams;
-    type Result = Option<Vec<crate::CodeLens>>;
+    type Params = lsp::CodeLensParams;
+    type Result = Option<Vec<lsp::CodeLens>>;
     const METHOD: &'static str = "textDocument/codeLens";
 }
 
@@ -537,8 +539,8 @@ impl Request for CodeLensRequest {
 pub enum CodeLensResolve {}
 
 impl Request for CodeLensResolve {
-    type Params = crate::CodeLens;
-    type Result = crate::CodeLens;
+    type Params = lsp::CodeLens;
+    type Result = lsp::CodeLens;
     const METHOD: &'static str = "codeLens/resolve";
 }
 
@@ -547,8 +549,8 @@ impl Request for CodeLensResolve {
 pub enum DocumentLinkRequest {}
 
 impl Request for DocumentLinkRequest {
-    type Params = crate::DocumentLinkParams;
-    type Result = Option<Vec<crate::DocumentLink>>;
+    type Params = lsp::DocumentLinkParams;
+    type Result = Option<Vec<lsp::DocumentLink>>;
     const METHOD: &'static str = "textDocument/documentLink";
 }
 
@@ -558,8 +560,8 @@ impl Request for DocumentLinkRequest {
 pub enum DocumentLinkResolve {}
 
 impl Request for DocumentLinkResolve {
-    type Params = crate::DocumentLink;
-    type Result = crate::DocumentLink;
+    type Params = lsp::DocumentLink;
+    type Result = lsp::DocumentLink;
     const METHOD: &'static str = "documentLink/resolve";
 }
 
@@ -568,8 +570,8 @@ impl Request for DocumentLinkResolve {
 pub enum Formatting {}
 
 impl Request for Formatting {
-    type Params = crate::DocumentFormattingParams;
-    type Result = Option<Vec<crate::TextEdit>>;
+    type Params = lsp::DocumentFormattingParams;
+    type Result = Option<Vec<lsp::TextEdit>>;
     const METHOD: &'static str = "textDocument/formatting";
 }
 
@@ -578,8 +580,8 @@ impl Request for Formatting {
 pub enum RangeFormatting {}
 
 impl Request for RangeFormatting {
-    type Params = crate::DocumentRangeFormattingParams;
-    type Result = Option<Vec<crate::TextEdit>>;
+    type Params = lsp::DocumentRangeFormattingParams;
+    type Result = Option<Vec<lsp::TextEdit>>;
     const METHOD: &'static str = "textDocument/rangeFormatting";
 }
 
@@ -589,8 +591,8 @@ impl Request for RangeFormatting {
 pub enum OnTypeFormatting {}
 
 impl Request for OnTypeFormatting {
-    type Params = crate::DocumentOnTypeFormattingParams;
-    type Result = Option<Vec<crate::TextEdit>>;
+    type Params = lsp::DocumentOnTypeFormattingParams;
+    type Result = Option<Vec<lsp::TextEdit>>;
     const METHOD: &'static str = "textDocument/onTypeFormatting";
 }
 
@@ -603,8 +605,8 @@ impl Request for OnTypeFormatting {
 pub enum LinkedEditingRange {}
 
 impl Request for LinkedEditingRange {
-    type Params = crate::LinkedEditingRangeParams;
-    type Result = Option<crate::LinkedEditingRanges>;
+    type Params = lsp::LinkedEditingRangeParams;
+    type Result = Option<lsp::LinkedEditingRanges>;
     const METHOD: &'static str = "textDocument/linkedEditingRange";
 }
 
@@ -613,8 +615,8 @@ impl Request for LinkedEditingRange {
 pub enum Rename {}
 
 impl Request for Rename {
-    type Params = crate::RenameParams;
-    type Result = Option<crate::WorkspaceEdit>;
+    type Params = lsp::RenameParams;
+    type Result = Option<lsp::WorkspaceEdit>;
     const METHOD: &'static str = "textDocument/rename";
 }
 
@@ -624,8 +626,8 @@ impl Request for Rename {
 pub enum DocumentColor {}
 
 impl Request for DocumentColor {
-    type Params = crate::DocumentColorParams;
-    type Result = Vec<crate::ColorInformation>;
+    type Params = lsp::DocumentColorParams;
+    type Result = Vec<lsp::ColorInformation>;
     const METHOD: &'static str = "textDocument/documentColor";
 }
 
@@ -635,8 +637,8 @@ impl Request for DocumentColor {
 pub enum ColorPresentationRequest {}
 
 impl Request for ColorPresentationRequest {
-    type Params = crate::ColorPresentationParams;
-    type Result = Vec<crate::ColorPresentation>;
+    type Params = lsp::ColorPresentationParams;
+    type Result = Vec<lsp::ColorPresentation>;
     const METHOD: &'static str = "textDocument/colorPresentation";
 }
 
@@ -645,8 +647,8 @@ impl Request for ColorPresentationRequest {
 pub enum FoldingRangeRequest {}
 
 impl Request for FoldingRangeRequest {
-    type Params = crate::FoldingRangeParams;
-    type Result = Option<Vec<crate::FoldingRange>>;
+    type Params = lsp::FoldingRangeParams;
+    type Result = Option<Vec<lsp::FoldingRange>>;
     const METHOD: &'static str = "textDocument/foldingRange";
 }
 
@@ -656,8 +658,8 @@ impl Request for FoldingRangeRequest {
 pub enum PrepareRenameRequest {}
 
 impl Request for PrepareRenameRequest {
-    type Params = crate::TextDocumentPositionParams;
-    type Result = Option<crate::PrepareRenameResponse>;
+    type Params = lsp::TextDocumentPositionParams;
+    type Result = Option<lsp::PrepareRenameResponse>;
     const METHOD: &'static str = "textDocument/prepareRename";
 }
 
@@ -667,8 +669,8 @@ pub enum InlineCompletionRequest {}
 
 #[cfg(feature = "proposed")]
 impl Request for InlineCompletionRequest {
-    type Params = crate::InlineCompletionParams;
-    type Result = Option<crate::InlineCompletionResponse>;
+    type Params = lsp::InlineCompletionParams;
+    type Result = Option<lsp::InlineCompletionResponse>;
     const METHOD: &'static str = "textDocument/inlineCompletion";
 }
 
@@ -680,7 +682,7 @@ pub enum WorkspaceFoldersRequest {}
 
 impl Request for WorkspaceFoldersRequest {
     type Params = ();
-    type Result = Option<Vec<crate::WorkspaceFolder>>;
+    type Result = Option<Vec<lsp::WorkspaceFolder>>;
     const METHOD: &'static str = "workspace/workspaceFolders";
 }
 
@@ -690,7 +692,7 @@ impl Request for WorkspaceFoldersRequest {
 pub enum WorkDoneProgressCreate {}
 
 impl Request for WorkDoneProgressCreate {
-    type Params = crate::WorkDoneProgressCreateParams;
+    type Params = lsp::WorkDoneProgressCreateParams;
     type Result = ();
     const METHOD: &'static str = "window/workDoneProgress/create";
 }
@@ -707,56 +709,56 @@ impl Request for WorkDoneProgressCreate {
 pub enum SelectionRangeRequest {}
 
 impl Request for SelectionRangeRequest {
-    type Params = crate::SelectionRangeParams;
-    type Result = Option<Vec<crate::SelectionRange>>;
+    type Params = lsp::SelectionRangeParams;
+    type Result = Option<Vec<lsp::SelectionRange>>;
     const METHOD: &'static str = "textDocument/selectionRange";
 }
 
 pub enum CallHierarchyPrepare {}
 
 impl Request for CallHierarchyPrepare {
-    type Params = crate::CallHierarchyPrepareParams;
-    type Result = Option<Vec<crate::CallHierarchyItem>>;
+    type Params = lsp::CallHierarchyPrepareParams;
+    type Result = Option<Vec<lsp::CallHierarchyItem>>;
     const METHOD: &'static str = "textDocument/prepareCallHierarchy";
 }
 
 pub enum CallHierarchyIncomingCalls {}
 
 impl Request for CallHierarchyIncomingCalls {
-    type Params = crate::CallHierarchyIncomingCallsParams;
-    type Result = Option<Vec<crate::CallHierarchyIncomingCall>>;
+    type Params = lsp::CallHierarchyIncomingCallsParams;
+    type Result = Option<Vec<lsp::CallHierarchyIncomingCall>>;
     const METHOD: &'static str = "callHierarchy/incomingCalls";
 }
 
 pub enum CallHierarchyOutgoingCalls {}
 
 impl Request for CallHierarchyOutgoingCalls {
-    type Params = crate::CallHierarchyOutgoingCallsParams;
-    type Result = Option<Vec<crate::CallHierarchyOutgoingCall>>;
+    type Params = lsp::CallHierarchyOutgoingCallsParams;
+    type Result = Option<Vec<lsp::CallHierarchyOutgoingCall>>;
     const METHOD: &'static str = "callHierarchy/outgoingCalls";
 }
 
 pub enum SemanticTokensFullRequest {}
 
 impl Request for SemanticTokensFullRequest {
-    type Params = crate::SemanticTokensParams;
-    type Result = Option<crate::SemanticTokensResult>;
+    type Params = lsp::SemanticTokensParams;
+    type Result = Option<lsp::SemanticTokensResult>;
     const METHOD: &'static str = "textDocument/semanticTokens/full";
 }
 
 pub enum SemanticTokensFullDeltaRequest {}
 
 impl Request for SemanticTokensFullDeltaRequest {
-    type Params = crate::SemanticTokensDeltaParams;
-    type Result = Option<crate::SemanticTokensFullDeltaResult>;
+    type Params = lsp::SemanticTokensDeltaParams;
+    type Result = Option<lsp::SemanticTokensFullDeltaResult>;
     const METHOD: &'static str = "textDocument/semanticTokens/full/delta";
 }
 
 pub enum SemanticTokensRangeRequest {}
 
 impl Request for SemanticTokensRangeRequest {
-    type Params = crate::SemanticTokensRangeParams;
-    type Result = Option<crate::SemanticTokensRangeResult>;
+    type Params = lsp::SemanticTokensRangeParams;
+    type Result = Option<lsp::SemanticTokensRangeResult>;
     const METHOD: &'static str = "textDocument/semanticTokens/range";
 }
 
@@ -797,8 +799,8 @@ impl Request for CodeLensRefresh {
 pub enum WillCreateFiles {}
 
 impl Request for WillCreateFiles {
-    type Params = crate::CreateFilesParams;
-    type Result = Option<crate::WorkspaceEdit>;
+    type Params = lsp::CreateFilesParams;
+    type Result = Option<lsp::WorkspaceEdit>;
     const METHOD: &'static str = "workspace/willCreateFiles";
 }
 
@@ -806,8 +808,8 @@ impl Request for WillCreateFiles {
 pub enum WillRenameFiles {}
 
 impl Request for WillRenameFiles {
-    type Params = crate::RenameFilesParams;
-    type Result = Option<crate::WorkspaceEdit>;
+    type Params = lsp::RenameFilesParams;
+    type Result = Option<lsp::WorkspaceEdit>;
     const METHOD: &'static str = "workspace/willRenameFiles";
 }
 
@@ -815,8 +817,8 @@ impl Request for WillRenameFiles {
 pub enum WillDeleteFiles {}
 
 impl Request for WillDeleteFiles {
-    type Params = crate::DeleteFilesParams;
-    type Result = Option<crate::WorkspaceEdit>;
+    type Params = lsp::DeleteFilesParams;
+    type Result = Option<lsp::WorkspaceEdit>;
     const METHOD: &'static str = "workspace/willDeleteFiles";
 }
 
@@ -824,16 +826,16 @@ impl Request for WillDeleteFiles {
 pub enum ShowDocument {}
 
 impl Request for ShowDocument {
-    type Params = crate::ShowDocumentParams;
-    type Result = crate::ShowDocumentResult;
+    type Params = lsp::ShowDocumentParams;
+    type Result = lsp::ShowDocumentResult;
     const METHOD: &'static str = "window/showDocument";
 }
 
 pub enum MonikerRequest {}
 
 impl Request for MonikerRequest {
-    type Params = crate::MonikerParams;
-    type Result = Option<Vec<crate::Moniker>>;
+    type Params = lsp::MonikerParams;
+    type Result = Option<Vec<lsp::Moniker>>;
     const METHOD: &'static str = "textDocument/moniker";
 }
 
@@ -842,8 +844,8 @@ impl Request for MonikerRequest {
 pub enum InlayHintRequest {}
 
 impl Request for InlayHintRequest {
-    type Params = crate::InlayHintParams;
-    type Result = Option<Vec<crate::InlayHint>>;
+    type Params = lsp::InlayHintParams;
+    type Result = Option<Vec<lsp::InlayHint>>;
     const METHOD: &'static str = "textDocument/inlayHint";
 }
 
@@ -854,8 +856,8 @@ impl Request for InlayHintRequest {
 pub enum InlayHintResolveRequest {}
 
 impl Request for InlayHintResolveRequest {
-    type Params = crate::InlayHint;
-    type Result = crate::InlayHint;
+    type Params = lsp::InlayHint;
+    type Result = lsp::InlayHint;
     const METHOD: &'static str = "inlayHint/resolve";
 }
 
@@ -878,8 +880,8 @@ impl Request for InlayHintRefreshRequest {
 pub enum InlineValueRequest {}
 
 impl Request for InlineValueRequest {
-    type Params = crate::InlineValueParams;
-    type Result = Option<Vec<crate::InlineValue>>;
+    type Params = lsp::InlineValueParams;
+    type Result = Option<Vec<lsp::InlineValue>>;
     const METHOD: &'static str = "textDocument/inlineValue";
 }
 
@@ -904,8 +906,8 @@ impl Request for InlineValueRefreshRequest {
 pub enum DocumentDiagnosticRequest {}
 
 impl Request for DocumentDiagnosticRequest {
-    type Params = crate::DocumentDiagnosticParams;
-    type Result = crate::DocumentDiagnosticReportResult;
+    type Params = lsp::DocumentDiagnosticParams;
+    type Result = lsp::DocumentDiagnosticReportResult;
     const METHOD: &'static str = "textDocument/diagnostic";
 }
 
@@ -919,9 +921,9 @@ impl Request for DocumentDiagnosticRequest {
 pub enum WorkspaceDiagnosticRequest {}
 
 impl Request for WorkspaceDiagnosticRequest {
-    type Params = crate::WorkspaceDiagnosticParams;
+    type Params = lsp::WorkspaceDiagnosticParams;
     const METHOD: &'static str = "workspace/diagnostic";
-    type Result = crate::WorkspaceDiagnosticReportResult;
+    type Result = lsp::WorkspaceDiagnosticReportResult;
 }
 
 /// The `workspace/diagnostic/refresh` request is sent from the server to the client. Servers can
@@ -946,8 +948,8 @@ impl Request for WorkspaceDiagnosticRefresh {
 pub enum TypeHierarchyPrepare {}
 
 impl Request for TypeHierarchyPrepare {
-    type Params = crate::TypeHierarchyPrepareParams;
-    type Result = Option<Vec<crate::TypeHierarchyItem>>;
+    type Params = lsp::TypeHierarchyPrepareParams;
+    type Result = Option<Vec<lsp::TypeHierarchyItem>>;
     const METHOD: &'static str = "textDocument/prepareTypeHierarchy";
 }
 
@@ -959,8 +961,8 @@ impl Request for TypeHierarchyPrepare {
 pub enum TypeHierarchySupertypes {}
 
 impl Request for TypeHierarchySupertypes {
-    type Params = crate::TypeHierarchySupertypesParams;
-    type Result = Option<Vec<crate::TypeHierarchyItem>>;
+    type Params = lsp::TypeHierarchySupertypesParams;
+    type Result = Option<Vec<lsp::TypeHierarchyItem>>;
     const METHOD: &'static str = "typeHierarchy/supertypes";
 }
 
@@ -971,8 +973,8 @@ impl Request for TypeHierarchySupertypes {
 pub enum TypeHierarchySubtypes {}
 
 impl Request for TypeHierarchySubtypes {
-    type Params = crate::TypeHierarchySubtypesParams;
-    type Result = Option<Vec<crate::TypeHierarchyItem>>;
+    type Params = lsp::TypeHierarchySubtypesParams;
+    type Result = Option<Vec<lsp::TypeHierarchyItem>>;
     const METHOD: &'static str = "typeHierarchy/subtypes";
 }
 

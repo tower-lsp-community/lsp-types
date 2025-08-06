@@ -1,14 +1,6 @@
-use super::{
-    CancelParams, CreateFilesParams, Debug, DeleteFilesParams, DidChangeConfigurationParams,
-    DidChangeNotebookDocumentParams, DidChangeTextDocumentParams, DidChangeWatchedFilesParams,
-    DidChangeWorkspaceFoldersParams, DidCloseNotebookDocumentParams, DidCloseTextDocumentParams,
-    DidOpenNotebookDocumentParams, DidOpenTextDocumentParams, DidSaveNotebookDocumentParams,
-    DidSaveTextDocumentParams, InitializedParams, LSPArray, LSPObject, LogMessageParams,
-    LogTraceParams, OneOf, ProgressParams, PublishDiagnosticsParams, RenameFilesParams,
-    SetTraceParams, ShowMessageParams, WillSaveTextDocumentParams, WorkDoneProgressCancelParams,
-};
-
 use serde::{Serialize, de::DeserializeOwned};
+
+use super::lsp;
 
 pub trait Notification {
     type Params: DeserializeOwned + Serialize + Send + Sync + 'static;
@@ -112,7 +104,7 @@ macro_rules! lsp_notification {
 pub enum Cancel {}
 
 impl Notification for Cancel {
-    type Params = CancelParams;
+    type Params = lsp::CancelParams;
     const METHOD: &'static str = "$/cancelRequest";
 }
 
@@ -122,7 +114,7 @@ impl Notification for Cancel {
 pub enum SetTrace {}
 
 impl Notification for SetTrace {
-    type Params = SetTraceParams;
+    type Params = lsp::SetTraceParams;
     const METHOD: &'static str = "$/setTrace";
 }
 
@@ -135,7 +127,7 @@ impl Notification for SetTrace {
 pub enum LogTrace {}
 
 impl Notification for LogTrace {
-    type Params = LogTraceParams;
+    type Params = lsp::LogTraceParams;
     const METHOD: &'static str = "$/logTrace";
 }
 
@@ -147,7 +139,7 @@ impl Notification for LogTrace {
 pub enum Initialized {}
 
 impl Notification for Initialized {
-    type Params = InitializedParams;
+    type Params = lsp::InitializedParams;
     const METHOD: &'static str = "initialized";
 }
 
@@ -168,7 +160,7 @@ impl Notification for Exit {
 pub enum ShowMessage {}
 
 impl Notification for ShowMessage {
-    type Params = ShowMessageParams;
+    type Params = lsp::ShowMessageParams;
     const METHOD: &'static str = "window/showMessage";
 }
 
@@ -177,7 +169,7 @@ impl Notification for ShowMessage {
 pub enum LogMessage {}
 
 impl Notification for LogMessage {
-    type Params = LogMessageParams;
+    type Params = lsp::LogMessageParams;
     const METHOD: &'static str = "window/logMessage";
 }
 
@@ -189,7 +181,7 @@ impl Notification for LogMessage {
 pub enum TelemetryEvent {}
 
 impl Notification for TelemetryEvent {
-    type Params = OneOf<LSPObject, LSPArray>;
+    type Params = lsp::OneOf<lsp::LSPObject, lsp::LSPArray>;
     const METHOD: &'static str = "telemetry/event";
 }
 
@@ -198,7 +190,7 @@ impl Notification for TelemetryEvent {
 pub enum DidChangeConfiguration {}
 
 impl Notification for DidChangeConfiguration {
-    type Params = DidChangeConfigurationParams;
+    type Params = lsp::DidChangeConfigurationParams;
     const METHOD: &'static str = "workspace/didChangeConfiguration";
 }
 
@@ -210,7 +202,7 @@ impl Notification for DidChangeConfiguration {
 pub enum DidOpenTextDocument {}
 
 impl Notification for DidOpenTextDocument {
-    type Params = DidOpenTextDocumentParams;
+    type Params = lsp::DidOpenTextDocumentParams;
     const METHOD: &'static str = "textDocument/didOpen";
 }
 
@@ -221,7 +213,7 @@ impl Notification for DidOpenTextDocument {
 pub enum DidChangeTextDocument {}
 
 impl Notification for DidChangeTextDocument {
-    type Params = DidChangeTextDocumentParams;
+    type Params = lsp::DidChangeTextDocumentParams;
     const METHOD: &'static str = "textDocument/didChange";
 }
 
@@ -231,7 +223,7 @@ impl Notification for DidChangeTextDocument {
 pub enum WillSaveTextDocument {}
 
 impl Notification for WillSaveTextDocument {
-    type Params = WillSaveTextDocumentParams;
+    type Params = lsp::WillSaveTextDocumentParams;
     const METHOD: &'static str = "textDocument/willSave";
 }
 
@@ -243,7 +235,7 @@ impl Notification for WillSaveTextDocument {
 pub enum DidCloseTextDocument {}
 
 impl Notification for DidCloseTextDocument {
-    type Params = DidCloseTextDocumentParams;
+    type Params = lsp::DidCloseTextDocumentParams;
     const METHOD: &'static str = "textDocument/didClose";
 }
 
@@ -252,35 +244,35 @@ impl Notification for DidCloseTextDocument {
 pub enum DidSaveTextDocument {}
 
 impl Notification for DidSaveTextDocument {
-    type Params = DidSaveTextDocumentParams;
+    type Params = lsp::DidSaveTextDocumentParams;
     const METHOD: &'static str = "textDocument/didSave";
 }
 
 #[derive(Debug)]
 pub enum DidOpenNotebookDocument {}
 impl Notification for DidOpenNotebookDocument {
-    type Params = DidOpenNotebookDocumentParams;
+    type Params = lsp::DidOpenNotebookDocumentParams;
     const METHOD: &'static str = "notebookDocument/didOpen";
 }
 
 #[derive(Debug)]
 pub enum DidChangeNotebookDocument {}
 impl Notification for DidChangeNotebookDocument {
-    type Params = DidChangeNotebookDocumentParams;
+    type Params = lsp::DidChangeNotebookDocumentParams;
     const METHOD: &'static str = "notebookDocument/didChange";
 }
 
 #[derive(Debug)]
 pub enum DidSaveNotebookDocument {}
 impl Notification for DidSaveNotebookDocument {
-    type Params = DidSaveNotebookDocumentParams;
+    type Params = lsp::DidSaveNotebookDocumentParams;
     const METHOD: &'static str = "notebookDocument/didSave";
 }
 
 #[derive(Debug)]
 pub enum DidCloseNotebookDocument {}
 impl Notification for DidCloseNotebookDocument {
-    type Params = DidCloseNotebookDocumentParams;
+    type Params = lsp::DidCloseNotebookDocumentParams;
     const METHOD: &'static str = "notebookDocument/didClose";
 }
 
@@ -292,7 +284,7 @@ impl Notification for DidCloseNotebookDocument {
 pub enum DidChangeWatchedFiles {}
 
 impl Notification for DidChangeWatchedFiles {
-    type Params = DidChangeWatchedFilesParams;
+    type Params = lsp::DidChangeWatchedFilesParams;
     const METHOD: &'static str = "workspace/didChangeWatchedFiles";
 }
 
@@ -302,7 +294,7 @@ impl Notification for DidChangeWatchedFiles {
 pub enum DidChangeWorkspaceFolders {}
 
 impl Notification for DidChangeWorkspaceFolders {
-    type Params = DidChangeWorkspaceFoldersParams;
+    type Params = lsp::DidChangeWorkspaceFoldersParams;
     const METHOD: &'static str = "workspace/didChangeWorkspaceFolders";
 }
 
@@ -311,7 +303,7 @@ impl Notification for DidChangeWorkspaceFolders {
 pub enum PublishDiagnostics {}
 
 impl Notification for PublishDiagnostics {
-    type Params = PublishDiagnosticsParams;
+    type Params = lsp::PublishDiagnosticsParams;
     const METHOD: &'static str = "textDocument/publishDiagnostics";
 }
 
@@ -321,7 +313,7 @@ impl Notification for PublishDiagnostics {
 pub enum Progress {}
 
 impl Notification for Progress {
-    type Params = ProgressParams;
+    type Params = lsp::ProgressParams;
     const METHOD: &'static str = "$/progress";
 }
 
@@ -331,7 +323,7 @@ impl Notification for Progress {
 pub enum WorkDoneProgressCancel {}
 
 impl Notification for WorkDoneProgressCancel {
-    type Params = WorkDoneProgressCancelParams;
+    type Params = lsp::WorkDoneProgressCancelParams;
     const METHOD: &'static str = "window/workDoneProgress/cancel";
 }
 
@@ -340,7 +332,7 @@ impl Notification for WorkDoneProgressCancel {
 pub enum DidCreateFiles {}
 
 impl Notification for DidCreateFiles {
-    type Params = CreateFilesParams;
+    type Params = lsp::CreateFilesParams;
     const METHOD: &'static str = "workspace/didCreateFiles";
 }
 
@@ -349,7 +341,7 @@ impl Notification for DidCreateFiles {
 pub enum DidRenameFiles {}
 
 impl Notification for DidRenameFiles {
-    type Params = RenameFilesParams;
+    type Params = lsp::RenameFilesParams;
     const METHOD: &'static str = "workspace/didRenameFiles";
 }
 
@@ -358,7 +350,7 @@ impl Notification for DidRenameFiles {
 pub enum DidDeleteFiles {}
 
 impl Notification for DidDeleteFiles {
-    type Params = DeleteFilesParams;
+    type Params = lsp::DeleteFilesParams;
     const METHOD: &'static str = "workspace/didDeleteFiles";
 }
 
