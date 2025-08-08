@@ -1,3 +1,7 @@
+//! Semantic Tokens
+//!
+//! Reference: <https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_semanticTokens>
+
 use std::borrow::Cow;
 
 use serde::{Deserialize, Serialize, ser::SerializeSeq};
@@ -651,15 +655,9 @@ mod tests {
     }
 
     #[test]
-    #[should_panic = "deser doesn't match"]
+    #[should_panic = "Length is not divisible by 5"]
     fn test_semantic_tokens_support_deserialization_err() {
-        test_deserialization(
-            r#"{"data":[1]}"#,
-            &SemanticTokens {
-                result_id: None,
-                data: vec![],
-            },
-        );
+        test_deserialization(r#"{"data":[1]}"#, &SemanticTokens::default());
     }
 
     #[test]
